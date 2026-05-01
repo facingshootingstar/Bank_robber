@@ -20,6 +20,8 @@ alarm_rise_rate = 44.0
 alarm_decay_rate = 9.0
 floor_texture_path = "res://assets/kenney/roguelike-indoors/tiles/floor_brown.png"
 floor_tint = Color(0.72, 0.68, 0.58, 1)
+accent_color = Color(0.48, 0.72, 1, 1)
+light_band_color = Color(0.66, 0.82, 1, 0.075)
 
 [node name="NorthWall" parent="." instance=ExtResource("11")]
 position = Vector2(480, 52)

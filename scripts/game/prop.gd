@@ -27,12 +27,29 @@ func get_rect_global() -> Rect2:
 
 func _draw() -> void:
 	var rect := Rect2(-size * 0.5, size)
+	_draw_shadow(rect)
 	if _runtime_texture != null:
 		draw_texture_rect(_runtime_texture, rect, tiled, tint)
 	else:
 		draw_rect(rect, fallback_color)
+	_draw_highlight(rect)
 	if solid:
 		draw_rect(rect, Color(0.03, 0.025, 0.02, 0.38), false, 2.0)
+
+func _draw_shadow(rect: Rect2) -> void:
+	var shadow_rect := rect
+	shadow_rect.position += Vector2(4.0, 5.0)
+	draw_rect(shadow_rect, Color(0.0, 0.0, 0.0, 0.18))
+
+func _draw_highlight(rect: Rect2) -> void:
+	var top_left := rect.position
+	var top_right := rect.position + Vector2(rect.size.x, 0.0)
+	var bottom_left := rect.position + Vector2(0.0, rect.size.y)
+	var bottom_right := rect.position + rect.size
+	draw_line(top_left, top_right, Color(1.0, 1.0, 1.0, 0.12), 1.0)
+	draw_line(top_left, bottom_left, Color(1.0, 1.0, 1.0, 0.08), 1.0)
+	draw_line(bottom_left, bottom_right, Color(0.0, 0.0, 0.0, 0.2), 1.0)
+	draw_line(top_right, bottom_right, Color(0.0, 0.0, 0.0, 0.16), 1.0)
 
 func _load_texture(path: String) -> Texture2D:
 	var image := Image.new()

@@ -9,6 +9,9 @@ const MAIN_MENU_SCENE := "res://scenes/ui/MainMenu.tscn"
 @export var floor_texture_path: String = "res://assets/kenney/roguelike-indoors/tiles/floor_brown.png"
 @export var floor_tint: Color = Color(0.85, 0.78, 0.68)
 @export var floor_rect: Rect2 = Rect2(48, 48, 864, 544)
+@export var accent_color: Color = Color(0.95, 0.68, 0.32)
+@export var grid_color: Color = Color(0.0, 0.0, 0.0, 0.1)
+@export var light_band_color: Color = Color(1.0, 0.92, 0.68, 0.08)
 
 @onready var player: Node2D = $Player
 @onready var hud: CanvasLayer = $HUD
@@ -203,14 +206,52 @@ func _go_to_level_select() -> void:
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, Vector2(960, 640)), Color(0.035, 0.04, 0.05))
+	_draw_floor_frame()
+	_draw_floor_surface()
+	_draw_floor_grid()
+	_draw_light_bands()
+
+func _draw_floor_frame() -> void:
+	for step in range(6):
+		var spread := float(6 - step) * 3.0
+		draw_rect(floor_rect.grow(spread), Color(0.0, 0.0, 0.0, 0.035), false, 2.0)
+	var outer := accent_color.darkened(0.42)
+	outer.a = 0.24
+	draw_rect(floor_rect.grow(7.0), outer, false, 3.0)
+	var inner := Color(1.0, 1.0, 1.0, 0.08)
+	draw_rect(floor_rect.grow(1.0), inner, false, 1.0)
+
+func _draw_floor_surface() -> void:
 	if _runtime_floor_texture != null:
 		draw_texture_rect(_runtime_floor_texture, floor_rect, true, floor_tint)
 	else:
 		draw_rect(floor_rect, Color(0.18, 0.16, 0.13))
-	for x in range(80, 880, 40):
-		draw_line(Vector2(x, 64), Vector2(x, 576), Color(0, 0, 0, 0.08), 1.0)
-	for y in range(80, 560, 40):
-		draw_line(Vector2(64, y), Vector2(896, y), Color(0, 0, 0, 0.08), 1.0)
+	var wash := accent_color
+	wash.a = 0.055
+	draw_rect(floor_rect, wash)
+
+func _draw_floor_grid() -> void:
+	var left := int(floor_rect.position.x + 32.0)
+	var right := int(floor_rect.position.x + floor_rect.size.x)
+	var top := int(floor_rect.position.y + 32.0)
+	var bottom := int(floor_rect.position.y + floor_rect.size.y)
+	for x in range(left, right, 40):
+		draw_line(Vector2(x, floor_rect.position.y + 16.0), Vector2(x, floor_rect.position.y + floor_rect.size.y - 16.0), grid_color, 1.0)
+	for y in range(top, bottom, 40):
+		draw_line(Vector2(floor_rect.position.x + 16.0, y), Vector2(floor_rect.position.x + floor_rect.size.x - 16.0, y), grid_color, 1.0)
+
+func _draw_light_bands() -> void:
+	for index in range(4):
+		var start_x := floor_rect.position.x - 150.0 + float(index) * 280.0
+		var top_y := floor_rect.position.y
+		var bottom_y := floor_rect.position.y + floor_rect.size.y
+		var band := PackedVector2Array([
+			Vector2(start_x, top_y),
+			Vector2(start_x + 92.0, top_y),
+			Vector2(start_x + 342.0, bottom_y),
+			Vector2(start_x + 214.0, bottom_y)
+		])
+		draw_colored_polygon(band, light_band_color)
 
 func _load_texture(path: String) -> Texture2D:
 	var image := Image.new()

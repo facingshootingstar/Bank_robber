@@ -18,6 +18,7 @@ func _build_ui() -> void:
 
 	var panel := PanelContainer.new()
 	panel.custom_minimum_size = Vector2(560, 470)
+	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.024, 0.03, 0.04, 0.94), Color(0.45, 0.86, 0.68, 0.32), 8))
 	center.add_child(panel)
 
 	var box := VBoxContainer.new()
@@ -28,6 +29,7 @@ func _build_ui() -> void:
 	title.text = "LEVEL SELECT"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 36)
+	title.add_theme_color_override("font_color", Color(0.74, 1.0, 0.78))
 	box.add_child(title)
 
 	for level_number in GameState.get_level_numbers():
@@ -39,6 +41,7 @@ func _build_ui() -> void:
 	var back_button := Button.new()
 	back_button.text = "Back"
 	back_button.custom_minimum_size = Vector2(280, 42)
+	_apply_button_style(back_button)
 	back_button.pressed.connect(_on_back_pressed)
 	box.add_child(back_button)
 
@@ -47,9 +50,31 @@ func _level_button(text: String, enabled: bool, callback: Callable) -> Button:
 	button.text = text
 	button.custom_minimum_size = Vector2(440, 58)
 	button.disabled = not enabled
+	_apply_button_style(button)
 	if enabled:
 		button.pressed.connect(callback)
 	return button
+
+func _apply_button_style(button: Button) -> void:
+	button.add_theme_stylebox_override("normal", _button_style(Color(0.11, 0.15, 0.17, 1.0), Color(0.46, 0.9, 0.68, 0.24)))
+	button.add_theme_stylebox_override("hover", _button_style(Color(0.15, 0.21, 0.23, 1.0), Color(0.62, 1.0, 0.78, 0.46)))
+	button.add_theme_stylebox_override("pressed", _button_style(Color(0.075, 0.1, 0.11, 1.0), Color(0.44, 0.86, 0.64, 0.6)))
+	button.add_theme_stylebox_override("disabled", _button_style(Color(0.065, 0.07, 0.078, 1.0), Color(0.2, 0.24, 0.25, 0.55)))
+	button.add_theme_color_override("font_color", Color(0.9, 0.96, 0.92))
+	button.add_theme_color_override("font_disabled_color", Color(0.42, 0.48, 0.48))
+
+func _panel_style(fill: Color, border: Color, radius: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = fill
+	style.border_color = border
+	style.set_border_width_all(1)
+	style.set_corner_radius_all(radius)
+	return style
+
+func _button_style(fill: Color, border: Color) -> StyleBoxFlat:
+	var style := _panel_style(fill, border, 6)
+	style.set_border_width_all(2)
+	return style
 
 func _slot_text(level_number: int) -> String:
 	var prefix := "Level " + str(level_number) + " - " + GameState.get_level_name(level_number)
