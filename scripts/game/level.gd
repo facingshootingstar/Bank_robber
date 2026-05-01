@@ -52,6 +52,7 @@ func _ready() -> void:
 		hud.set_alert_state(_alert_state)
 	_set_camera_loop_active(false)
 	_set_laser_shutdown_active(false)
+	_show_level_briefing()
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -111,6 +112,10 @@ func activate_laser_shutdown(duration: float) -> void:
 	_laser_shutdown_timer = maxf(_laser_shutdown_timer, duration)
 	_set_laser_shutdown_active(true)
 	show_system_message("LASERS OFFLINE " + str(int(ceil(_laser_shutdown_timer))) + "s", 1.6)
+
+func _show_level_briefing() -> void:
+	GameState.objective_changed.emit("Case " + level_title + ": steal $" + str(GameState.loot_required) + " and escape.")
+	show_system_message("LEVEL " + str(level_number) + ": " + level_title.to_upper(), 2.0)
 
 func _required_loot() -> int:
 	var total := 0

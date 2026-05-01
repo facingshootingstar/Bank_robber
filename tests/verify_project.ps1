@@ -126,6 +126,8 @@ Require-Text "scripts/game/level.gd" 'func get_wall_rects' "Level must read wall
 Require-Text "scripts/game/level.gd" 'func activate_camera_loop' "Level must activate camera loop hacks"
 Require-Text "scripts/game/level.gd" 'func activate_laser_shutdown' "Level must activate laser shutdowns"
 Require-Text "scripts/game/level.gd" 'func show_system_message' "Level must relay system messages to HUD"
+Require-Text "scripts/game/level.gd" 'func _show_level_briefing' "Level must show a start briefing"
+Require-Text "scripts/game/level.gd" 'level_title' "Level briefing/objective must use the level title"
 Require-Text "scripts/game/level.gd" 'func _go_to_next_or_select' "Level must route result overlay to the next level"
 Require-Text "scripts/game/level.gd" 'func _set_alert_state' "Level must aggregate alert state"
 Require-Text "scripts/game/level.gd" 'func _draw_floor_frame' "Level must draw a framed playfield"
