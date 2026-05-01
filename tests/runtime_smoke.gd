@@ -66,6 +66,10 @@ func _run() -> void:
 			_failures.append("GameState best score was not recorded on win")
 		if not game_state.has_method("has_next_level"):
 			_failures.append("GameState missing has_next_level")
+		if not game_state.has_method("_load_progress"):
+			_failures.append("GameState missing _load_progress")
+		if not game_state.has_method("_save_progress"):
+			_failures.append("GameState missing _save_progress")
 
 	var sound_manager := root.get_node_or_null("SoundManager")
 	if sound_manager == null:

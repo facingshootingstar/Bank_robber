@@ -6,6 +6,8 @@ signal objective_changed(text: String)
 signal timer_changed(seconds: float)
 signal result_changed(result: String)
 
+const SAVE_PATH := "user://bank_robber_save.cfg"
+
 const LEVELS := {
 	1: {
 		"name": "Front Lobby",
@@ -58,6 +60,7 @@ var best_ranks: Dictionary = {}
 
 func _ready() -> void:
 	_ensure_default_input_actions()
+	_load_progress()
 
 func _ensure_default_input_actions() -> void:
 	_add_keys("move_left", [KEY_A, KEY_LEFT])
@@ -181,6 +184,7 @@ func win_level() -> void:
 	run_active = false
 	unlocked_levels = mini(maxi(unlocked_levels, selected_level + 1), LEVELS.size())
 	_record_best_run()
+	_save_progress()
 	objective_changed.emit("Escaped with the money.")
 	result_changed.emit(result)
 
@@ -241,3 +245,31 @@ func _record_best_run() -> void:
 	if final_score > previous_score:
 		best_scores[selected_level] = final_score
 		best_ranks[selected_level] = final_rank
+
+func _load_progress() -> void:
+	var config := ConfigFile.new()
+	var error := config.load(SAVE_PATH)
+	if error != OK:
+		return
+	unlocked_levels = mini(maxi(int(config.get_value("progress", "unlocked_levels", unlocked_levels)), 1), LEVELS.size())
+	best_scores.clear()
+	best_ranks.clear()
+	for level_number in get_level_numbers():
+		var key := str(level_number)
+		var score := int(config.get_value("best_scores", key, 0))
+		if score <= 0:
+			continue
+		best_scores[level_number] = score
+		best_ranks[level_number] = str(config.get_value("best_ranks", key, ""))
+
+func _save_progress() -> void:
+	var config := ConfigFile.new()
+	config.set_value("progress", "unlocked_levels", unlocked_levels)
+	for level_number in get_level_numbers():
+		var score := get_best_score(level_number)
+		if score <= 0:
+			continue
+		var key := str(level_number)
+		config.set_value("best_scores", key, score)
+		config.set_value("best_ranks", key, get_best_rank(level_number))
+	config.save(SAVE_PATH)
