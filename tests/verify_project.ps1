@@ -65,6 +65,7 @@ $requiredFiles = @(
     "scenes/levels/Level3.tscn",
     "scenes/levels/Level4.tscn",
     "scenes/levels/Level5.tscn",
+    "scenes/levels/Level6.tscn",
     "assets/kenney/ATTRIBUTION.md",
     "assets/kenney/top-down-shooter/player_blue.png",
     "assets/kenney/top-down-shooter/guard_soldier.png",
@@ -88,6 +89,7 @@ Require-Text "scripts/game_state.gd" 'func lose_level' "GameState must implement
 Require-Text "scripts/game_state.gd" 'LEVELS := \{' "GameState must define a 3-level registry"
 Require-Text "scripts/game_state.gd" 'Level3.tscn' "GameState registry must include Level 3"
 Require-Text "scripts/game_state.gd" 'Level5.tscn' "GameState registry must include Level 5"
+Require-Text "scripts/game_state.gd" 'Level6.tscn' "GameState registry must include Level 6"
 Require-Text "scripts/game_state.gd" 'func _calculate_final_score' "GameState must calculate score on completion"
 Require-Text "scripts/game_state.gd" 'final_rank' "GameState must track final rank"
 Require-Text "scripts/game_state.gd" 'final_badges' "GameState must track completion badges"

@@ -1,0 +1,204 @@
+[gd_scene load_steps=16 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/level.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/game/Guard.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/game/SecurityCamera.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/game/Loot.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/game/Vault.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/game/ExitZone.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseOverlay.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResultOverlay.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/game/Prop.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/game/HackTerminal.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/game/LaserSensor.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/game/PowerSwitch.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/game/ThermalVent.tscn" id="15"]
+
+[node name="Level6" type="Node2D"]
+script = ExtResource("1")
+level_number = 6
+level_title = "Rooftop Getaway"
+alarm_rise_rate = 56.0
+alarm_decay_rate = 6.0
+floor_texture_path = "res://assets/kenney/roguelike-indoors/tiles/floor_green.png"
+floor_tint = Color(0.56, 0.66, 0.62, 1)
+accent_color = Color(0.65, 0.88, 1, 1)
+light_band_color = Color(0.7, 0.9, 1, 0.075)
+
+[node name="NorthWall" parent="." instance=ExtResource("11")]
+position = Vector2(480, 52)
+size = Vector2(860, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="SouthWall" parent="." instance=ExtResource("11")]
+position = Vector2(480, 588)
+size = Vector2(860, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="WestWall" parent="." instance=ExtResource("11")]
+position = Vector2(52, 320)
+size = Vector2(28, 536)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="EastWall" parent="." instance=ExtResource("11")]
+position = Vector2(908, 320)
+size = Vector2(28, 536)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="RoofWallA" parent="." instance=ExtResource("11")]
+position = Vector2(236, 430)
+size = Vector2(28, 260)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="RoofWallB" parent="." instance=ExtResource("11")]
+position = Vector2(398, 210)
+size = Vector2(28, 260)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="RoofWallC" parent="." instance=ExtResource("11")]
+position = Vector2(574, 438)
+size = Vector2(28, 250)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="RoofWallD" parent="." instance=ExtResource("11")]
+position = Vector2(746, 222)
+size = Vector2(28, 250)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="ExitDoorMark" parent="." instance=ExtResource("11")]
+position = Vector2(836, 116)
+size = Vector2(78, 42)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/garage_door.png"
+tiled = false
+z_layer = 3
+
+[node name="RooftopCrateA" parent="." instance=ExtResource("11")]
+position = Vector2(154, 160)
+size = Vector2(44, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
+tiled = false
+z_layer = 3
+
+[node name="RooftopCrateB" parent="." instance=ExtResource("11")]
+position = Vector2(506, 526)
+size = Vector2(44, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
+tiled = false
+z_layer = 3
+
+[node name="TerminalProp" parent="." instance=ExtResource("11")]
+position = Vector2(170, 156)
+size = Vector2(34, 34)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/terminal.png"
+tiled = false
+z_layer = 3
+
+[node name="ExitZone" parent="." instance=ExtResource("7")]
+position = Vector2(836, 116)
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(126, 520)
+
+[node name="HackTerminal" parent="." instance=ExtResource("12")]
+position = Vector2(170, 156)
+loop_duration = 8.0
+
+[node name="LaserPowerSwitch" parent="." instance=ExtResource("14")]
+position = Vector2(520, 506)
+shutdown_duration = 8.0
+
+[node name="ThermalVentA" parent="." instance=ExtResource("15")]
+position = Vector2(338, 462)
+heat_radius = 42.0
+phase_offset = 0.6
+
+[node name="ThermalVentB" parent="." instance=ExtResource("15")]
+position = Vector2(698, 340)
+heat_radius = 44.0
+active_duration = 1.1
+idle_duration = 1.8
+phase_offset = 1.0
+
+[node name="LaserA" parent="." instance=ExtResource("13")]
+position = Vector2(262, 316)
+beam_length = 250.0
+alarm_rate = 48.0
+
+[node name="LaserB" parent="." instance=ExtResource("13")]
+position = Vector2(620, 184)
+rotation = 1.5708
+beam_length = 244.0
+alarm_rate = 50.0
+
+[node name="LaserExit" parent="." instance=ExtResource("13")]
+position = Vector2(650, 176)
+beam_length = 180.0
+alarm_rate = 54.0
+
+[node name="CashRoofA" parent="." instance=ExtResource("5")]
+position = Vector2(150, 132)
+value = 300
+
+[node name="CashRoofB" parent="." instance=ExtResource("5")]
+position = Vector2(520, 132)
+value = 300
+
+[node name="CashRoofC" parent="." instance=ExtResource("5")]
+position = Vector2(692, 508)
+value = 300
+
+[node name="Vault" parent="." instance=ExtResource("6")]
+position = Vector2(778, 430)
+value = 1200
+
+[node name="GuardLower" parent="." instance=ExtResource("3")]
+position = Vector2(330, 514)
+speed = 108.0
+vision_length = 190.0
+patrol_points = PackedVector2Array(306, 514, 520, 514, 520, 314, 306, 314)
+
+[node name="GuardUpper" parent="." instance=ExtResource("3")]
+position = Vector2(520, 150)
+speed = 106.0
+vision_length = 188.0
+patrol_points = PackedVector2Array(470, 150, 690, 150, 690, 282, 470, 282)
+
+[node name="GuardExit" parent="." instance=ExtResource("3")]
+position = Vector2(790, 226)
+speed = 110.0
+vision_length = 196.0
+patrol_points = PackedVector2Array(790, 226, 842, 226, 842, 514, 790, 514)
+
+[node name="CameraLower" parent="." instance=ExtResource("4")]
+position = Vector2(306, 92)
+rotation = 1.5708
+sweep_degrees = 112.0
+vision_length = 230.0
+
+[node name="CameraMid" parent="." instance=ExtResource("4")]
+position = Vector2(556, 92)
+rotation = 1.5708
+sweep_degrees = 120.0
+vision_length = 240.0
+
+[node name="CameraExit" parent="." instance=ExtResource("4")]
+position = Vector2(842, 92)
+rotation = 1.5708
+sweep_degrees = 95.0
+vision_length = 205.0
+
+[node name="HUD" parent="." instance=ExtResource("8")]
+
+[node name="PauseOverlay" parent="." instance=ExtResource("9")]
+
+[node name="ResultOverlay" parent="." instance=ExtResource("10")]

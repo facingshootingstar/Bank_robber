@@ -22,6 +22,7 @@ const SCENES := [
 	"res://scenes/levels/Level3.tscn",
 	"res://scenes/levels/Level4.tscn",
 	"res://scenes/levels/Level5.tscn",
+	"res://scenes/levels/Level6.tscn",
 ]
 
 var _failures: Array[String] = []

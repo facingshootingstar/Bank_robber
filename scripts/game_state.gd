@@ -34,6 +34,11 @@ const LEVELS := {
 		"description": "A final heist route with layered cameras, lasers, patrols, and a long escape.",
 		"scene": "res://scenes/levels/Level5.tscn",
 	},
+	6: {
+		"name": "Rooftop Getaway",
+		"description": "Cross the rooftop security maze and escape before the last lockdown catches you.",
+		"scene": "res://scenes/levels/Level6.tscn",
+	},
 }
 
 const PAR_TIMES := {
@@ -42,6 +47,7 @@ const PAR_TIMES := {
 	3: 85.0,
 	4: 105.0,
 	5: 130.0,
+	6: 145.0,
 }
 
 var selected_level: int = 1
