@@ -1,10 +1,14 @@
 extends Node2D
 
 const MAIN_MENU_SCENE := "res://scenes/ui/MainMenu.tscn"
-
 @export var level_number: int = 1
+@export var level_title: String = "Front Lobby"
 @export var alarm_rise_rate: float = 38.0
 @export var alarm_decay_rate: float = 12.0
+@export var floor_texture: Texture2D
+@export var floor_texture_path: String = "res://assets/kenney/roguelike-indoors/tiles/floor_brown.png"
+@export var floor_tint: Color = Color(0.85, 0.78, 0.68)
+@export var floor_rect: Rect2 = Rect2(48, 48, 864, 544)
 
 @onready var player: Node2D = $Player
 @onready var hud: CanvasLayer = $HUD
@@ -15,9 +19,13 @@ var walls: Array[Rect2] = []
 var _interactables: Array[Node] = []
 var _guards: Array[Node] = []
 var _cameras: Array[Node] = []
+var _runtime_floor_texture: Texture2D = null
 
 func _ready() -> void:
-	walls = _build_walls()
+	_runtime_floor_texture = floor_texture
+	if _runtime_floor_texture == null and floor_texture_path != "":
+		_runtime_floor_texture = _load_texture(floor_texture_path)
+	walls = get_wall_rects()
 	_interactables = get_tree().get_nodes_in_group("interactables")
 	_guards = get_tree().get_nodes_in_group("guards")
 	_cameras = get_tree().get_nodes_in_group("cameras")
@@ -64,6 +72,13 @@ func restart_level() -> void:
 	get_tree().paused = false
 	get_tree().reload_current_scene()
 
+func get_wall_rects() -> Array[Rect2]:
+	var rects: Array[Rect2] = []
+	for node in get_tree().get_nodes_in_group("walls"):
+		if is_instance_valid(node) and node.has_method("get_rect_global"):
+			rects.append(node.get_rect_global())
+	return rects
+
 func _required_loot() -> int:
 	var total := 0
 	for node in get_tree().get_nodes_in_group("interactables"):
@@ -71,21 +86,6 @@ func _required_loot() -> int:
 		if value != null:
 			total += int(value)
 	return total
-
-func _build_walls() -> Array[Rect2]:
-	return [
-		Rect2(40, 40, 880, 24),
-		Rect2(40, 576, 880, 24),
-		Rect2(40, 40, 24, 560),
-		Rect2(896, 40, 24, 560),
-		Rect2(214, 40, 24, 360),
-		Rect2(214, 470, 24, 130),
-		Rect2(420, 176, 24, 280),
-		Rect2(600, 40, 24, 210),
-		Rect2(600, 330, 24, 270),
-		Rect2(720, 250, 176, 24),
-		Rect2(720, 408, 176, 24),
-	]
 
 func _circle_hits_wall(center: Vector2, radius: float) -> bool:
 	for wall in walls:
@@ -159,17 +159,18 @@ func _go_to_level_select() -> void:
 	get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
 
 func _draw() -> void:
-	draw_rect(Rect2(Vector2.ZERO, Vector2(960, 640)), Color(0.055, 0.065, 0.085))
-	draw_rect(Rect2(Vector2(64, 64), Vector2(832, 512)), Color(0.11, 0.13, 0.16))
+	draw_rect(Rect2(Vector2.ZERO, Vector2(960, 640)), Color(0.035, 0.04, 0.05))
+	if _runtime_floor_texture != null:
+		draw_texture_rect(_runtime_floor_texture, floor_rect, true, floor_tint)
+	else:
+		draw_rect(floor_rect, Color(0.18, 0.16, 0.13))
 	for x in range(80, 880, 40):
-		draw_line(Vector2(x, 64), Vector2(x, 576), Color(1, 1, 1, 0.025), 1.0)
+		draw_line(Vector2(x, 64), Vector2(x, 576), Color(0, 0, 0, 0.08), 1.0)
 	for y in range(80, 560, 40):
-		draw_line(Vector2(64, y), Vector2(896, y), Color(1, 1, 1, 0.025), 1.0)
-	for wall in walls:
-		draw_rect(wall, Color(0.36, 0.42, 0.5))
-		draw_rect(wall.grow(-4.0), Color(0.22, 0.26, 0.32))
-	draw_rect(Rect2(84, 118, 96, 36), Color(0.42, 0.26, 0.13))
-	draw_rect(Rect2(84, 184, 96, 36), Color(0.42, 0.26, 0.13))
-	draw_rect(Rect2(84, 250, 96, 36), Color(0.42, 0.26, 0.13))
-	draw_rect(Rect2(654, 300, 210, 84), Color(0.16, 0.19, 0.24))
-	draw_rect(Rect2(654, 300, 210, 84), Color(0.7, 0.78, 0.88, 0.2), false, 2.0)
+		draw_line(Vector2(64, y), Vector2(896, y), Color(0, 0, 0, 0.08), 1.0)
+
+func _load_texture(path: String) -> Texture2D:
+	var image := Image.new()
+	if image.load(path) != OK:
+		return null
+	return ImageTexture.create_from_image(image)

@@ -1,7 +1,6 @@
 extends Control
 
 const LEVEL_SELECT_SCENE := "res://scenes/ui/LevelSelect.tscn"
-const LEVEL_ONE_SCENE := "res://scenes/levels/Level1.tscn"
 
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -63,7 +62,7 @@ func _spacer(height: float) -> Control:
 
 func _on_play_pressed() -> void:
 	GameState.start_level(1)
-	get_tree().change_scene_to_file(LEVEL_ONE_SCENE)
+	get_tree().change_scene_to_file(GameState.get_level_path(1))
 
 func _on_level_select_pressed() -> void:
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)

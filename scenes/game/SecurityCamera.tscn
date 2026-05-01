@@ -4,3 +4,6 @@
 
 [node name="SecurityCamera" type="Node2D"]
 script = ExtResource("1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(2.5, 2.5)

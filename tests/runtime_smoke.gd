@@ -12,7 +12,10 @@ const SCENES := [
 	"res://scenes/game/Loot.tscn",
 	"res://scenes/game/Vault.tscn",
 	"res://scenes/game/ExitZone.tscn",
+	"res://scenes/game/Prop.tscn",
 	"res://scenes/levels/Level1.tscn",
+	"res://scenes/levels/Level2.tscn",
+	"res://scenes/levels/Level3.tscn",
 ]
 
 var _failures: Array[String] = []

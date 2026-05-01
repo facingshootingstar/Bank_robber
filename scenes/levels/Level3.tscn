@@ -1,0 +1,153 @@
+[gd_scene load_steps=12 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/level.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/game/Guard.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/game/SecurityCamera.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/game/Loot.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/game/Vault.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/game/ExitZone.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseOverlay.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResultOverlay.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/game/Prop.tscn" id="11"]
+
+[node name="Level3" type="Node2D"]
+script = ExtResource("1")
+level_number = 3
+level_title = "Back Alley Escape"
+alarm_rise_rate = 44.0
+alarm_decay_rate = 9.0
+floor_texture_path = "res://assets/kenney/roguelike-indoors/tiles/floor_brown.png"
+floor_tint = Color(0.72, 0.68, 0.58, 1)
+
+[node name="NorthWall" parent="." instance=ExtResource("11")]
+position = Vector2(480, 52)
+size = Vector2(860, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="SouthWall" parent="." instance=ExtResource("11")]
+position = Vector2(480, 588)
+size = Vector2(860, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="WestWall" parent="." instance=ExtResource("11")]
+position = Vector2(52, 320)
+size = Vector2(28, 536)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="EastWall" parent="." instance=ExtResource("11")]
+position = Vector2(908, 320)
+size = Vector2(28, 536)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="StorageWallA" parent="." instance=ExtResource("11")]
+position = Vector2(218, 386)
+size = Vector2(28, 306)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="StorageWallB" parent="." instance=ExtResource("11")]
+position = Vector2(420, 214)
+size = Vector2(28, 314)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="GarageWallA" parent="." instance=ExtResource("11")]
+position = Vector2(632, 402)
+size = Vector2(28, 318)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="GarageWallB" parent="." instance=ExtResource("11")]
+position = Vector2(760, 212)
+size = Vector2(296, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="CrateA" parent="." instance=ExtResource("11")]
+position = Vector2(152, 164)
+size = Vector2(44, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
+tiled = false
+z_layer = 3
+
+[node name="CrateB" parent="." instance=ExtResource("11")]
+position = Vector2(320, 488)
+size = Vector2(44, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
+tiled = false
+z_layer = 3
+
+[node name="CrateC" parent="." instance=ExtResource("11")]
+position = Vector2(520, 156)
+size = Vector2(44, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
+tiled = false
+z_layer = 3
+
+[node name="GarageDoorA" parent="." instance=ExtResource("11")]
+position = Vector2(840, 118)
+size = Vector2(80, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/garage_door.png"
+tiled = false
+z_layer = 3
+
+[node name="Terminal" parent="." instance=ExtResource("11")]
+position = Vector2(704, 504)
+size = Vector2(34, 34)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/terminal.png"
+tiled = false
+z_layer = 3
+
+[node name="ExitZone" parent="." instance=ExtResource("7")]
+position = Vector2(838, 116)
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(126, 514)
+
+[node name="CashStorageA" parent="." instance=ExtResource("5")]
+position = Vector2(152, 138)
+value = 200
+
+[node name="CashStorageB" parent="." instance=ExtResource("5")]
+position = Vector2(520, 134)
+value = 200
+
+[node name="Vault" parent="." instance=ExtResource("6")]
+position = Vector2(708, 502)
+value = 300
+
+[node name="GuardStorage" parent="." instance=ExtResource("3")]
+position = Vector2(306, 188)
+speed = 96.0
+vision_length = 164.0
+patrol_points = PackedVector2Array(306, 188, 306, 518, 378, 518, 378, 188)
+
+[node name="GuardGarage" parent="." instance=ExtResource("3")]
+position = Vector2(718, 320)
+speed = 102.0
+vision_length = 180.0
+patrol_points = PackedVector2Array(694, 320, 842, 320, 842, 492, 694, 492)
+
+[node name="CameraStorage" parent="." instance=ExtResource("4")]
+position = Vector2(492, 92)
+rotation = 1.5708
+sweep_degrees = 110.0
+vision_length = 212.0
+
+[node name="CameraGarage" parent="." instance=ExtResource("4")]
+position = Vector2(832, 248)
+rotation = 3.14159
+sweep_degrees = 90.0
+vision_length = 190.0
+
+[node name="HUD" parent="." instance=ExtResource("8")]
+
+[node name="PauseOverlay" parent="." instance=ExtResource("9")]
+
+[node name="ResultOverlay" parent="." instance=ExtResource("10")]

@@ -34,6 +34,7 @@ $requiredFiles = @(
     "scripts/game/loot.gd",
     "scripts/game/vault.gd",
     "scripts/game/exit_zone.gd",
+    "scripts/game/prop.gd",
     "scripts/game/level.gd",
     "scripts/ui/hud.gd",
     "scripts/ui/pause_overlay.gd",
@@ -49,7 +50,17 @@ $requiredFiles = @(
     "scenes/game/Loot.tscn",
     "scenes/game/Vault.tscn",
     "scenes/game/ExitZone.tscn",
-    "scenes/levels/Level1.tscn"
+    "scenes/game/Prop.tscn",
+    "scenes/levels/Level1.tscn",
+    "scenes/levels/Level2.tscn",
+    "scenes/levels/Level3.tscn",
+    "assets/kenney/ATTRIBUTION.md",
+    "assets/kenney/top-down-shooter/player_blue.png",
+    "assets/kenney/top-down-shooter/guard_soldier.png",
+    "assets/kenney/top-down-shooter/robber_black.png",
+    "assets/kenney/roguelike-indoors/tiles/floor_brown.png",
+    "assets/kenney/roguelike-indoors/tiles/wall_brown.png",
+    "assets/kenney/roguelike-indoors/tiles/safe.png"
 )
 
 foreach ($file in $requiredFiles) {
@@ -62,11 +73,15 @@ Require-Text "project.godot" '\[input\]' "Input actions section must exist"
 Require-Text "scripts/game_state.gd" 'signal alarm_changed' "GameState must expose alarm_changed signal"
 Require-Text "scripts/game_state.gd" 'func win_level' "GameState must implement win_level"
 Require-Text "scripts/game_state.gd" 'func lose_level' "GameState must implement lose_level"
+Require-Text "scripts/game_state.gd" 'LEVELS := \{' "GameState must define a 3-level registry"
+Require-Text "scripts/game_state.gd" 'Level3.tscn' "GameState registry must include Level 3"
 Require-Text "scripts/game/player.gd" 'func _physics_process' "Player must implement physics movement"
 Require-Text "scripts/game/guard.gd" 'func can_see_player' "Guard must implement player detection"
 Require-Text "scripts/game/security_camera.gd" 'func can_see_player' "SecurityCamera must implement player detection"
 Require-Text "scripts/game/level.gd" 'func restart_level' "Level must implement restart_level"
+Require-Text "scripts/game/level.gd" 'func get_wall_rects' "Level must read wall rectangles from level scenes"
 Require-Text "scripts/ui/hud.gd" 'func _on_alarm_changed' "HUD must react to alarm changes"
+Require-Text "assets/kenney/ATTRIBUTION.md" 'Creative Commons Zero, CC0' "Attribution must record CC0 license"
 
 if ($failures.Count -gt 0) {
     Write-Host "Project verification failed:" -ForegroundColor Red

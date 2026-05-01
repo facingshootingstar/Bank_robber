@@ -6,6 +6,24 @@ signal objective_changed(text: String)
 signal timer_changed(seconds: float)
 signal result_changed(result: String)
 
+const LEVELS := {
+	1: {
+		"name": "Front Lobby",
+		"description": "Slip through the front lobby, learn the patrol timing, grab quick cash, and reach the van.",
+		"scene": "res://scenes/levels/Level1.tscn",
+	},
+	2: {
+		"name": "Vault Wing",
+		"description": "Work through offices and camera sweeps to crack the deeper vault.",
+		"scene": "res://scenes/levels/Level2.tscn",
+	},
+	3: {
+		"name": "Back Alley Escape",
+		"description": "Escape through storage and garage corridors after the robbery.",
+		"scene": "res://scenes/levels/Level3.tscn",
+	},
+}
+
 var selected_level: int = 1
 var unlocked_levels: int = 1
 var loot_collected: int = 0
@@ -53,8 +71,28 @@ func start_level(level_number: int, required_loot: int = 0) -> void:
 	loot_changed.emit(loot_collected, loot_required)
 	alarm_changed.emit(alarm, alarm_max)
 	timer_changed.emit(run_timer)
-	objective_changed.emit("Find the vault cash.")
+	objective_changed.emit("Find the cash.")
 	result_changed.emit(result)
+
+func get_level_numbers() -> Array:
+	var numbers := LEVELS.keys()
+	numbers.sort()
+	return numbers
+
+func get_level_data(level_number: int) -> Dictionary:
+	return LEVELS.get(level_number, LEVELS[1])
+
+func get_level_path(level_number: int) -> String:
+	return str(get_level_data(level_number).get("scene", LEVELS[1]["scene"]))
+
+func get_level_name(level_number: int) -> String:
+	return str(get_level_data(level_number).get("name", "Level " + str(level_number)))
+
+func get_level_description(level_number: int) -> String:
+	return str(get_level_data(level_number).get("description", ""))
+
+func is_level_unlocked(level_number: int) -> bool:
+	return level_number <= unlocked_levels
 
 func set_loot_required(required: int) -> void:
 	loot_required = max(required, 0)
@@ -98,7 +136,7 @@ func win_level() -> void:
 		return
 	result = "win"
 	run_active = false
-	unlocked_levels = max(unlocked_levels, selected_level + 1)
+	unlocked_levels = mini(maxi(unlocked_levels, selected_level + 1), LEVELS.size())
 	objective_changed.emit("Escaped with the money.")
 	result_changed.emit(result)
 
