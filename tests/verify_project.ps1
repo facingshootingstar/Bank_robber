@@ -133,6 +133,8 @@ Require-Text "scripts/ui/hud.gd" 'func set_alert_state' "HUD must display guard 
 Require-Text "scripts/ui/hud.gd" 'func show_system_message' "HUD must display transient system feedback"
 Require-Text "scripts/ui/hud.gd" 'func _alarm_color' "HUD must color alarm pressure dynamically"
 Require-Text "scripts/ui/hud.gd" 'func _panel_style' "HUD must define a polished panel style"
+Require-Text "scripts/ui/pause_overlay.gd" 'func _panel_style' "Pause overlay must define a polished panel style"
+Require-Text "scripts/ui/result_overlay.gd" 'func _panel_style' "Result overlay must define a polished panel style"
 Require-Text "scripts/menu/main_menu.gd" 'func _panel_style' "Main menu must define a polished panel style"
 Require-Text "scripts/menu/main_menu.gd" 'func _on_continue_pressed' "Main menu must support continue flow"
 Require-Text "scripts/menu/level_select.gd" 'func _panel_style' "Level select must define a polished panel style"
