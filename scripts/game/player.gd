@@ -79,6 +79,9 @@ func _draw() -> void:
 	draw_line(Vector2.ZERO, facing * (radius + 8.0), Color.WHITE, 3.0)
 
 func _load_texture(path: String) -> Texture2D:
+	var texture := ResourceLoader.load(path)
+	if texture is Texture2D:
+		return texture as Texture2D
 	var image := Image.new()
 	if image.load(path) != OK:
 		return null

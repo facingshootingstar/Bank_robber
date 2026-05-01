@@ -9,6 +9,8 @@ const SCENES := [
 	"res://scenes/game/Player.tscn",
 	"res://scenes/game/Guard.tscn",
 	"res://scenes/game/SecurityCamera.tscn",
+	"res://scenes/game/HackTerminal.tscn",
+	"res://scenes/game/LaserSensor.tscn",
 	"res://scenes/game/Loot.tscn",
 	"res://scenes/game/Vault.tscn",
 	"res://scenes/game/ExitZone.tscn",
@@ -16,6 +18,8 @@ const SCENES := [
 	"res://scenes/levels/Level1.tscn",
 	"res://scenes/levels/Level2.tscn",
 	"res://scenes/levels/Level3.tscn",
+	"res://scenes/levels/Level4.tscn",
+	"res://scenes/levels/Level5.tscn",
 ]
 
 var _failures: Array[String] = []
@@ -49,6 +53,12 @@ func _run() -> void:
 		game_state.win_level()
 		if game_state.result != "win":
 			_failures.append("GameState win_level did not set result")
+		if not game_state.has_method("get_run_score"):
+			_failures.append("GameState missing get_run_score")
+		elif game_state.get_run_score() <= 0:
+			_failures.append("GameState score was not calculated on win")
+		if not game_state.has_method("get_run_rank"):
+			_failures.append("GameState missing get_run_rank")
 
 	var sound_manager := root.get_node_or_null("SoundManager")
 	if sound_manager == null:
@@ -61,6 +71,8 @@ func _run() -> void:
 		sound_manager.play_vault()
 		sound_manager.play_alarm_pulse()
 		sound_manager.play_ui_click()
+		sound_manager.play_hack()
+		sound_manager.play_laser()
 		await process_frame
 		await create_timer(0.35).timeout
 		if sound_manager.has_method("stop_all"):

@@ -38,6 +38,9 @@ func _draw() -> void:
 		draw_rect(Rect2(Vector2(-10, -5), Vector2(20, 10)), Color(0.25, 0.55, 0.25))
 
 func _load_texture(path: String) -> Texture2D:
+	var texture := ResourceLoader.load(path)
+	if texture is Texture2D:
+		return texture as Texture2D
 	var image := Image.new()
 	if image.load(path) != OK:
 		return null

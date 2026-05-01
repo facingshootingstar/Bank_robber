@@ -11,13 +11,18 @@ Bank Robber is a small Godot 4 top-down stealth game. Sneak into the bank, avoid
 ## Current Scope
 
 - Main menu
-- Level select with 3 playable levels and unlock progression
+- Level select with 5 playable levels and unlock progression
 - Level 1: Front Lobby
 - Level 2: Vault Wing
 - Level 3: Back Alley Escape
+- Level 4: Security Core
+- Level 5: Penthouse Vault
 - Guards with patrol, suspicious, chase, and search behavior
 - Sweeping security cameras
+- Hack terminals that temporarily loop cameras
+- Laser sensor beams that pressure the alarm meter
 - Loot, vault, exit, alarm, timer, HUD
+- Completion score and rank based on loot, speed, and alarm control
 - Alert HUD states, procedural footsteps, UI clicks, pickups, vault, and alarm pulses
 - Player movement bob/sway for a lighter sneaking feel
 - Framed floors, subtle security light bands, prop shadows, and polished HUD/menu panels

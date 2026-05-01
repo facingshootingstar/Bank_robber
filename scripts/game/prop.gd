@@ -52,6 +52,9 @@ func _draw_highlight(rect: Rect2) -> void:
 	draw_line(top_right, bottom_right, Color(0.0, 0.0, 0.0, 0.16), 1.0)
 
 func _load_texture(path: String) -> Texture2D:
+	var texture := ResourceLoader.load(path)
+	if texture is Texture2D:
+		return texture as Texture2D
 	var image := Image.new()
 	if image.load(path) != OK:
 		return null

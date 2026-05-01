@@ -1,0 +1,215 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/level.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/game/Guard.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/game/SecurityCamera.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/game/Loot.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/game/Vault.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/game/ExitZone.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseOverlay.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResultOverlay.tscn" id="10"]
+[ext_resource type="PackedScene" path="res://scenes/game/Prop.tscn" id="11"]
+[ext_resource type="PackedScene" path="res://scenes/game/HackTerminal.tscn" id="12"]
+[ext_resource type="PackedScene" path="res://scenes/game/LaserSensor.tscn" id="13"]
+
+[node name="Level5" type="Node2D"]
+script = ExtResource("1")
+level_number = 5
+level_title = "Penthouse Vault"
+alarm_rise_rate = 52.0
+alarm_decay_rate = 7.0
+floor_texture_path = "res://assets/kenney/roguelike-indoors/tiles/floor_brown.png"
+floor_tint = Color(0.68, 0.62, 0.54, 1)
+accent_color = Color(1, 0.36, 0.28, 1)
+light_band_color = Color(1, 0.55, 0.35, 0.07)
+
+[node name="NorthWall" parent="." instance=ExtResource("11")]
+position = Vector2(480, 52)
+size = Vector2(860, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="SouthWall" parent="." instance=ExtResource("11")]
+position = Vector2(480, 588)
+size = Vector2(860, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="WestWall" parent="." instance=ExtResource("11")]
+position = Vector2(52, 320)
+size = Vector2(28, 536)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="EastWall" parent="." instance=ExtResource("11")]
+position = Vector2(908, 320)
+size = Vector2(28, 536)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="GalleryWallA" parent="." instance=ExtResource("11")]
+position = Vector2(220, 412)
+size = Vector2(28, 292)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="GalleryWallB" parent="." instance=ExtResource("11")]
+position = Vector2(418, 198)
+size = Vector2(28, 292)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_brown.png"
+solid = true
+
+[node name="GalleryWallC" parent="." instance=ExtResource("11")]
+position = Vector2(612, 412)
+size = Vector2(28, 292)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="VaultNorth" parent="." instance=ExtResource("11")]
+position = Vector2(754, 218)
+size = Vector2(248, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="VaultSouth" parent="." instance=ExtResource("11")]
+position = Vector2(754, 462)
+size = Vector2(248, 28)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="VaultEast" parent="." instance=ExtResource("11")]
+position = Vector2(864, 340)
+size = Vector2(28, 244)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="VaultWestTop" parent="." instance=ExtResource("11")]
+position = Vector2(642, 260)
+size = Vector2(28, 84)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="VaultWestBottom" parent="." instance=ExtResource("11")]
+position = Vector2(642, 422)
+size = Vector2(28, 80)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/wall_gray.png"
+solid = true
+
+[node name="DoorMark" parent="." instance=ExtResource("11")]
+position = Vector2(642, 340)
+size = Vector2(42, 42)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/door.png"
+tiled = false
+z_layer = 3
+
+[node name="PlantA" parent="." instance=ExtResource("11")]
+position = Vector2(144, 160)
+size = Vector2(30, 30)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/plant.png"
+tiled = false
+z_layer = 3
+
+[node name="DeskA" parent="." instance=ExtResource("11")]
+position = Vector2(322, 120)
+size = Vector2(92, 32)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/desk_orange.png"
+tiled = false
+z_layer = 3
+
+[node name="CrateA" parent="." instance=ExtResource("11")]
+position = Vector2(524, 520)
+size = Vector2(44, 44)
+texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
+tiled = false
+z_layer = 3
+
+[node name="ExitZone" parent="." instance=ExtResource("7")]
+position = Vector2(830, 118)
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(126, 514)
+
+[node name="HackTerminalA" parent="." instance=ExtResource("12")]
+position = Vector2(318, 122)
+loop_duration = 8.0
+
+[node name="HackTerminalB" parent="." instance=ExtResource("12")]
+position = Vector2(724, 508)
+loop_duration = 6.0
+
+[node name="LaserGalleryA" parent="." instance=ExtResource("13")]
+position = Vector2(252, 304)
+beam_length = 328.0
+alarm_rate = 44.0
+
+[node name="LaserGalleryB" parent="." instance=ExtResource("13")]
+position = Vector2(454, 188)
+rotation = 1.5708
+beam_length = 324.0
+alarm_rate = 42.0
+
+[node name="LaserVault" parent="." instance=ExtResource("13")]
+position = Vector2(680, 282)
+rotation = 1.5708
+beam_length = 116.0
+alarm_rate = 55.0
+
+[node name="CashPenthouseA" parent="." instance=ExtResource("5")]
+position = Vector2(144, 134)
+value = 240
+
+[node name="CashPenthouseB" parent="." instance=ExtResource("5")]
+position = Vector2(522, 134)
+value = 260
+
+[node name="CashPenthouseC" parent="." instance=ExtResource("5")]
+position = Vector2(522, 516)
+value = 260
+
+[node name="Vault" parent="." instance=ExtResource("6")]
+position = Vector2(756, 342)
+value = 1000
+
+[node name="GuardGallery" parent="." instance=ExtResource("3")]
+position = Vector2(334, 514)
+speed = 106.0
+vision_length = 184.0
+patrol_points = PackedVector2Array(304, 514, 566, 514, 566, 280, 304, 280)
+
+[node name="GuardVault" parent="." instance=ExtResource("3")]
+position = Vector2(806, 506)
+speed = 108.0
+vision_length = 196.0
+patrol_points = PackedVector2Array(696, 506, 830, 506, 830, 250, 696, 250)
+
+[node name="GuardExit" parent="." instance=ExtResource("3")]
+position = Vector2(796, 148)
+speed = 104.0
+vision_length = 176.0
+patrol_points = PackedVector2Array(696, 148, 842, 148, 842, 210, 696, 210)
+
+[node name="CameraGallery" parent="." instance=ExtResource("4")]
+position = Vector2(514, 92)
+rotation = 1.5708
+sweep_degrees = 112.0
+vision_length = 238.0
+
+[node name="CameraVault" parent="." instance=ExtResource("4")]
+position = Vector2(820, 248)
+rotation = 3.14159
+sweep_degrees = 92.0
+vision_length = 220.0
+
+[node name="CameraExit" parent="." instance=ExtResource("4")]
+position = Vector2(842, 92)
+rotation = 1.5708
+sweep_degrees = 82.0
+vision_length = 188.0
+
+[node name="HUD" parent="." instance=ExtResource("8")]
+
+[node name="PauseOverlay" parent="." instance=ExtResource("9")]
+
+[node name="ResultOverlay" parent="." instance=ExtResource("10")]

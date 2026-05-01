@@ -9,6 +9,7 @@ extends Node2D
 var _base_rotation := 0.0
 var _time := 0.0
 var _sprite: Sprite2D = null
+var _looped := false
 
 func _ready() -> void:
 	add_to_group("cameras")
@@ -20,11 +21,19 @@ func _ready() -> void:
 
 func reset_camera() -> void:
 	_time = 0.0
+	_looped = false
 	rotation = _base_rotation
+	queue_redraw()
+
+func set_looped(is_looped: bool) -> void:
+	_looped = is_looped
 	queue_redraw()
 
 func _physics_process(delta: float) -> void:
 	if not GameState.run_active:
+		return
+	if _looped:
+		queue_redraw()
 		return
 	_time += delta
 	var sweep := sin(_time * sweep_speed) * deg_to_rad(sweep_degrees * 0.5)
@@ -32,6 +41,8 @@ func _physics_process(delta: float) -> void:
 	queue_redraw()
 
 func can_see_player(player_position: Vector2) -> bool:
+	if _looped:
+		return false
 	var origin := global_position
 	var forward := Vector2.RIGHT.rotated(global_rotation)
 	var to_player := player_position - origin
@@ -50,12 +61,18 @@ func _draw() -> void:
 	var half_angle := deg_to_rad(vision_angle_degrees * 0.5)
 	var left := Vector2.RIGHT.rotated(-half_angle) * vision_length
 	var right := Vector2.RIGHT.rotated(half_angle) * vision_length
-	draw_colored_polygon(PackedVector2Array([Vector2.ZERO, left, right]), Color(1.0, 0.72, 0.1, 0.16))
+	var cone_color := Color(1.0, 0.72, 0.1, 0.16)
+	if _looped:
+		cone_color = Color(0.28, 0.85, 1.0, 0.12)
+	draw_colored_polygon(PackedVector2Array([Vector2.ZERO, left, right]), cone_color)
 	if _sprite == null or _sprite.texture == null:
-		draw_rect(Rect2(Vector2(-11, -9), Vector2(22, 18)), Color(0.95, 0.75, 0.15))
-	draw_line(Vector2.ZERO, Vector2.RIGHT * 22.0, Color.WHITE, 3.0)
+		draw_rect(Rect2(Vector2(-11, -9), Vector2(22, 18)), Color(0.3, 0.85, 1.0) if _looped else Color(0.95, 0.75, 0.15))
+	draw_line(Vector2.ZERO, Vector2.RIGHT * 22.0, Color(0.55, 0.95, 1.0) if _looped else Color.WHITE, 3.0)
 
 func _load_texture(path: String) -> Texture2D:
+	var texture := ResourceLoader.load(path)
+	if texture is Texture2D:
+		return texture as Texture2D
 	var image := Image.new()
 	if image.load(path) != OK:
 		return null

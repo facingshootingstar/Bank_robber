@@ -32,6 +32,9 @@ func _draw() -> void:
 		draw_circle(Vector2(24, 25), 8.0, Color(0.04, 0.05, 0.06))
 
 func _load_texture(path: String) -> Texture2D:
+	var texture := ResourceLoader.load(path)
+	if texture is Texture2D:
+		return texture as Texture2D
 	var image := Image.new()
 	if image.load(path) != OK:
 		return null

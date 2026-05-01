@@ -22,6 +22,24 @@ const LEVELS := {
 		"description": "Escape through storage and garage corridors after the robbery.",
 		"scene": "res://scenes/levels/Level3.tscn",
 	},
+	4: {
+		"name": "Security Core",
+		"description": "Hack the control room, cross laser grids, and rob the guarded core vault.",
+		"scene": "res://scenes/levels/Level4.tscn",
+	},
+	5: {
+		"name": "Penthouse Vault",
+		"description": "A final heist route with layered cameras, lasers, patrols, and a long escape.",
+		"scene": "res://scenes/levels/Level5.tscn",
+	},
+}
+
+const PAR_TIMES := {
+	1: 55.0,
+	2: 75.0,
+	3: 85.0,
+	4: 105.0,
+	5: 130.0,
 }
 
 var selected_level: int = 1
@@ -33,6 +51,8 @@ var alarm_max: float = 100.0
 var run_timer: float = 0.0
 var run_active: bool = false
 var result: String = ""
+var final_score: int = 0
+var final_rank: String = ""
 
 func _ready() -> void:
 	_ensure_default_input_actions()
@@ -68,6 +88,8 @@ func start_level(level_number: int, required_loot: int = 0) -> void:
 	run_timer = 0.0
 	run_active = true
 	result = ""
+	final_score = 0
+	final_rank = ""
 	loot_changed.emit(loot_collected, loot_required)
 	alarm_changed.emit(alarm, alarm_max)
 	timer_changed.emit(run_timer)
@@ -131,9 +153,16 @@ func tick_timer(delta: float) -> void:
 func can_escape() -> bool:
 	return loot_required > 0 and loot_collected >= loot_required
 
+func get_run_score() -> int:
+	return final_score
+
+func get_run_rank() -> String:
+	return final_rank
+
 func win_level() -> void:
 	if not run_active or result != "":
 		return
+	_calculate_final_score()
 	result = "win"
 	run_active = false
 	unlocked_levels = mini(maxi(unlocked_levels, selected_level + 1), LEVELS.size())
@@ -155,6 +184,8 @@ func reset_run() -> void:
 	run_timer = 0.0
 	run_active = false
 	result = ""
+	final_score = 0
+	final_rank = ""
 	loot_changed.emit(loot_collected, loot_required)
 	alarm_changed.emit(alarm, alarm_max)
 	timer_changed.emit(run_timer)
@@ -167,3 +198,25 @@ func _emit_objective() -> void:
 	else:
 		var remaining: int = maxi(loot_required - loot_collected, 0)
 		objective_changed.emit("Steal $" + str(remaining) + " more.")
+
+func _calculate_final_score() -> void:
+	var par_time := float(PAR_TIMES.get(selected_level, 100.0))
+	var time_efficiency := clampf(1.0 - (run_timer / maxf(par_time * 2.0, 1.0)), 0.0, 1.0)
+	var alarm_efficiency := clampf(1.0 - (alarm / maxf(alarm_max, 1.0)), 0.0, 1.0)
+	var loot_efficiency := 1.0
+	if loot_required > 0:
+		loot_efficiency = clampf(float(loot_collected) / float(loot_required), 0.0, 1.0)
+	var efficiency := loot_efficiency * 0.25 + time_efficiency * 0.35 + alarm_efficiency * 0.4
+	final_score = maxi(0, loot_collected + selected_level * 175 + int(round(time_efficiency * 600.0)) + int(round(alarm_efficiency * 750.0)))
+	final_rank = _rank_for_efficiency(efficiency)
+
+func _rank_for_efficiency(efficiency: float) -> String:
+	if efficiency >= 0.92:
+		return "S"
+	if efficiency >= 0.8:
+		return "A"
+	if efficiency >= 0.66:
+		return "B"
+	if efficiency >= 0.5:
+		return "C"
+	return "D"

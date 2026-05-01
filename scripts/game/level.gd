@@ -25,6 +25,8 @@ var _cameras: Array[Node] = []
 var _runtime_floor_texture: Texture2D = null
 var _alert_state := "Hidden"
 var _alarm_pulse_timer := 0.0
+var _camera_loop_timer := 0.0
+var _camera_loop_active := false
 
 func _ready() -> void:
 	_runtime_floor_texture = floor_texture
@@ -44,6 +46,7 @@ func _ready() -> void:
 	result_overlay.next_requested.connect(_go_to_level_select)
 	if hud.has_method("set_alert_state"):
 		hud.set_alert_state(_alert_state)
+	_set_camera_loop_active(false)
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -53,6 +56,7 @@ func _process(delta: float) -> void:
 	if not GameState.run_active:
 		return
 	_alarm_pulse_timer = maxf(_alarm_pulse_timer - delta, 0.0)
+	_update_camera_loop(delta)
 	GameState.tick_timer(delta)
 	_update_interaction_prompt()
 	_update_detection(delta)
@@ -86,6 +90,11 @@ func get_wall_rects() -> Array[Rect2]:
 		if is_instance_valid(node) and node.has_method("get_rect_global"):
 			rects.append(node.get_rect_global())
 	return rects
+
+func activate_camera_loop(duration: float) -> void:
+	_camera_loop_timer = maxf(_camera_loop_timer, duration)
+	_set_camera_loop_active(true)
+	GameState.objective_changed.emit("Cameras looped for " + str(int(ceil(_camera_loop_timer))) + " seconds.")
 
 func _required_loot() -> int:
 	var total := 0
@@ -186,6 +195,21 @@ func _play_alarm_pulse(cooldown: float) -> void:
 	SoundManager.play_alarm_pulse()
 	_alarm_pulse_timer = cooldown
 
+func _update_camera_loop(delta: float) -> void:
+	if _camera_loop_timer <= 0.0:
+		if _camera_loop_active:
+			_set_camera_loop_active(false)
+		return
+	_camera_loop_timer = maxf(_camera_loop_timer - delta, 0.0)
+	if _camera_loop_timer <= 0.0:
+		_set_camera_loop_active(false)
+
+func _set_camera_loop_active(active: bool) -> void:
+	_camera_loop_active = active
+	for camera in _cameras:
+		if is_instance_valid(camera) and camera.has_method("set_looped"):
+			camera.set_looped(active)
+
 func _on_result_changed(result: String) -> void:
 	if result == "win":
 		result_overlay.show_result(true)
@@ -254,6 +278,9 @@ func _draw_light_bands() -> void:
 		draw_colored_polygon(band, light_band_color)
 
 func _load_texture(path: String) -> Texture2D:
+	var texture := ResourceLoader.load(path)
+	if texture is Texture2D:
+		return texture as Texture2D
 	var image := Image.new()
 	if image.load(path) != OK:
 		return null
