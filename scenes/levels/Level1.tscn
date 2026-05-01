@@ -1,0 +1,56 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://scripts/game/level.gd" id="1"]
+[ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
+[ext_resource type="PackedScene" path="res://scenes/game/Guard.tscn" id="3"]
+[ext_resource type="PackedScene" path="res://scenes/game/SecurityCamera.tscn" id="4"]
+[ext_resource type="PackedScene" path="res://scenes/game/Loot.tscn" id="5"]
+[ext_resource type="PackedScene" path="res://scenes/game/Vault.tscn" id="6"]
+[ext_resource type="PackedScene" path="res://scenes/game/ExitZone.tscn" id="7"]
+[ext_resource type="PackedScene" path="res://scenes/ui/HUD.tscn" id="8"]
+[ext_resource type="PackedScene" path="res://scenes/ui/PauseOverlay.tscn" id="9"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ResultOverlay.tscn" id="10"]
+
+[node name="Level1" type="Node2D"]
+script = ExtResource("1")
+level_number = 1
+
+[node name="ExitZone" parent="." instance=ExtResource("7")]
+position = Vector2(112, 526)
+
+[node name="Player" parent="." instance=ExtResource("2")]
+position = Vector2(124, 512)
+
+[node name="CashFrontDesk" parent="." instance=ExtResource("5")]
+position = Vector2(144, 132)
+value = 100
+
+[node name="CashOffice" parent="." instance=ExtResource("5")]
+position = Vector2(342, 516)
+value = 150
+
+[node name="Vault" parent="." instance=ExtResource("6")]
+position = Vector2(782, 342)
+value = 450
+
+[node name="GuardLobby" parent="." instance=ExtResource("3")]
+position = Vector2(326, 168)
+patrol_points = PackedVector2Array(292, 168, 384, 168, 384, 310, 292, 310)
+
+[node name="GuardVault" parent="." instance=ExtResource("3")]
+position = Vector2(686, 494)
+speed = 82.0
+vision_length = 150.0
+patrol_points = PackedVector2Array(686, 494, 842, 494, 842, 456, 686, 456)
+
+[node name="LobbyCamera" parent="." instance=ExtResource("4")]
+position = Vector2(548, 112)
+rotation = 1.5708
+sweep_degrees = 95.0
+vision_length = 210.0
+
+[node name="HUD" parent="." instance=ExtResource("8")]
+
+[node name="PauseOverlay" parent="." instance=ExtResource("9")]
+
+[node name="ResultOverlay" parent="." instance=ExtResource("10")]
