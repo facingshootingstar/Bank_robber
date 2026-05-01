@@ -60,8 +60,10 @@ func _slot_text(level_number: int) -> String:
 func _start_level(level_number: int) -> void:
 	if not GameState.is_level_unlocked(level_number):
 		return
+	SoundManager.play_ui_click()
 	GameState.start_level(level_number)
 	get_tree().change_scene_to_file(GameState.get_level_path(level_number))
 
 func _on_back_pressed() -> void:
+	SoundManager.play_ui_click()
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE)

@@ -50,6 +50,23 @@ func _run() -> void:
 		if game_state.result != "win":
 			_failures.append("GameState win_level did not set result")
 
+	var sound_manager := root.get_node_or_null("SoundManager")
+	if sound_manager == null:
+		_failures.append("SoundManager autoload missing at /root/SoundManager")
+	elif not sound_manager.has_method("play_footstep"):
+		_failures.append("SoundManager missing play_footstep")
+	else:
+		sound_manager.play_footstep()
+		sound_manager.play_pickup()
+		sound_manager.play_vault()
+		sound_manager.play_alarm_pulse()
+		sound_manager.play_ui_click()
+		await process_frame
+		await create_timer(0.35).timeout
+		if sound_manager.has_method("stop_all"):
+			sound_manager.stop_all()
+			await process_frame
+
 	if _failures.is_empty():
 		print("Runtime smoke passed.")
 		quit(0)

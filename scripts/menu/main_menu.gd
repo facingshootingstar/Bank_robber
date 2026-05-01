@@ -61,11 +61,14 @@ func _spacer(height: float) -> Control:
 	return spacer
 
 func _on_play_pressed() -> void:
+	SoundManager.play_ui_click()
 	GameState.start_level(1)
 	get_tree().change_scene_to_file(GameState.get_level_path(1))
 
 func _on_level_select_pressed() -> void:
+	SoundManager.play_ui_click()
 	get_tree().change_scene_to_file(LEVEL_SELECT_SCENE)
 
 func _on_quit_pressed() -> void:
+	SoundManager.play_ui_click()
 	get_tree().quit()

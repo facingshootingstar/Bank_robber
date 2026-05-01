@@ -35,7 +35,7 @@ func _build_ui() -> void:
 	top.add_child(row)
 
 	objective_label = Label.new()
-	objective_label.custom_minimum_size = Vector2(330, 32)
+	objective_label.custom_minimum_size = Vector2(280, 32)
 	row.add_child(objective_label)
 
 	loot_label = Label.new()
@@ -43,17 +43,19 @@ func _build_ui() -> void:
 	row.add_child(loot_label)
 
 	alarm_bar = ProgressBar.new()
-	alarm_bar.custom_minimum_size = Vector2(220, 26)
+	alarm_bar.custom_minimum_size = Vector2(200, 26)
 	alarm_bar.show_percentage = false
 	row.add_child(alarm_bar)
 
 	alert_label = Label.new()
-	alert_label.text = ""
-	alert_label.custom_minimum_size = Vector2(88, 32)
+	alert_label.text = "HIDDEN"
+	alert_label.custom_minimum_size = Vector2(140, 32)
+	alert_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	alert_label.add_theme_font_size_override("font_size", 14)
 	row.add_child(alert_label)
 
 	timer_label = Label.new()
-	timer_label.custom_minimum_size = Vector2(90, 32)
+	timer_label.custom_minimum_size = Vector2(84, 32)
 	row.add_child(timer_label)
 
 	prompt_label = Label.new()
@@ -82,5 +84,20 @@ func _on_timer_changed(seconds: float) -> void:
 func show_prompt(text: String) -> void:
 	prompt_label.text = text
 
+func set_alert_state(state: String) -> void:
+	match state:
+		"Chased":
+			alert_label.text = "CHASE"
+			alert_label.add_theme_color_override("font_color", Color(1.0, 0.25, 0.22))
+		"Suspicious":
+			alert_label.text = "WATCHING"
+			alert_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.18))
+		"Searching":
+			alert_label.text = "SEARCH"
+			alert_label.add_theme_color_override("font_color", Color(1.0, 0.52, 0.2))
+		_:
+			alert_label.text = "HIDDEN"
+			alert_label.add_theme_color_override("font_color", Color(0.54, 0.96, 0.72))
+
 func set_detected(is_detected: bool) -> void:
-	alert_label.text = "SEEN" if is_detected else ""
+	set_alert_state("Chased" if is_detected else "Hidden")

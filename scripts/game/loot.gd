@@ -25,6 +25,7 @@ func interact(_player: Node) -> void:
 		return
 	collected = true
 	visible = false
+	SoundManager.play_pickup()
 	GameState.add_loot(value)
 
 func reset_loot() -> void:

@@ -5,11 +5,16 @@ const PROMPT_NONE := ""
 @export var speed: float = 220.0
 @export var radius: float = 14.0
 @export var texture_path: String = "res://assets/kenney/top-down-shooter/player_blue.png"
+@export var walk_bob_amount: float = 3.5
+@export var walk_sway_amount: float = 0.13
+@export var footstep_interval: float = 0.28
 
 var nearby_interactable: Node = null
 var prompt_text: String = PROMPT_NONE
 var facing: Vector2 = Vector2.RIGHT
 var _sprite: Sprite2D = null
+var _walk_phase: float = 0.0
+var _footstep_timer: float = 0.0
 
 func _ready() -> void:
 	z_index = 20
@@ -22,10 +27,9 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var input_vector := Input.get_vector("move_left", "move_right", "move_up", "move_down")
+	var is_moving := input_vector.length() > 0.01
 	if input_vector.length() > 0.01:
 		facing = input_vector.normalized()
-		if _sprite != null:
-			_sprite.rotation = facing.angle() + PI * 0.5
 	var motion := input_vector * speed * delta
 	var level := get_parent()
 	if level != null and level.has_method("move_player_with_collision"):
@@ -37,7 +41,27 @@ func _physics_process(delta: float) -> void:
 		if nearby_interactable.has_method("interact"):
 			nearby_interactable.interact(self)
 
+	_apply_walk_animation(delta, is_moving)
 	queue_redraw()
+
+func _apply_walk_animation(delta: float, is_moving: bool) -> void:
+	if _sprite == null:
+		return
+	var base_rotation := facing.angle() + PI * 0.5
+	if is_moving:
+		_walk_phase += delta * 11.0
+		_footstep_timer -= delta
+		if _footstep_timer <= 0.0:
+			SoundManager.play_footstep()
+			_footstep_timer = footstep_interval
+		var bob := sin(_walk_phase * 2.0) * walk_bob_amount
+		var sway := sin(_walk_phase) * walk_sway_amount
+		_sprite.position = Vector2(0.0, bob)
+		_sprite.rotation = base_rotation + sway
+	else:
+		_footstep_timer = 0.0
+		_sprite.position = _sprite.position.lerp(Vector2.ZERO, min(delta * 10.0, 1.0))
+		_sprite.rotation = lerp_angle(_sprite.rotation, base_rotation, min(delta * 10.0, 1.0))
 
 func set_interactable(target: Node, prompt: String) -> void:
 	nearby_interactable = target

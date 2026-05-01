@@ -24,6 +24,7 @@ func interact(_player: Node) -> void:
 	if opened:
 		return
 	opened = true
+	SoundManager.play_vault()
 	GameState.add_loot(value)
 	queue_redraw()
 

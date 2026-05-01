@@ -26,6 +26,7 @@ $requiredFiles = @(
     "README.md",
     "project.godot",
     "scripts/game_state.gd",
+    "scripts/audio/sound_manager.gd",
     "scripts/menu/main_menu.gd",
     "scripts/menu/level_select.gd",
     "scripts/game/player.gd",
@@ -69,19 +70,31 @@ foreach ($file in $requiredFiles) {
 
 Require-Text "project.godot" 'run/main_scene="res://scenes/ui/MainMenu.tscn"' "Main scene must be MainMenu.tscn"
 Require-Text "project.godot" 'GameState="\*res://scripts/game_state.gd"' "GameState autoload must be configured"
+Require-Text "project.godot" 'SoundManager="\*res://scripts/audio/sound_manager.gd"' "SoundManager autoload must be configured"
 Require-Text "project.godot" '\[input\]' "Input actions section must exist"
 Require-Text "scripts/game_state.gd" 'signal alarm_changed' "GameState must expose alarm_changed signal"
 Require-Text "scripts/game_state.gd" 'func win_level' "GameState must implement win_level"
 Require-Text "scripts/game_state.gd" 'func lose_level' "GameState must implement lose_level"
 Require-Text "scripts/game_state.gd" 'LEVELS := \{' "GameState must define a 3-level registry"
 Require-Text "scripts/game_state.gd" 'Level3.tscn' "GameState registry must include Level 3"
+Require-Text "scripts/audio/sound_manager.gd" 'func play_footstep' "SoundManager must implement footstep audio"
+Require-Text "scripts/audio/sound_manager.gd" 'func play_alarm_pulse' "SoundManager must implement alarm pulse audio"
 Require-Text "scripts/game/player.gd" 'func _physics_process' "Player must implement physics movement"
+Require-Text "scripts/game/player.gd" 'func _apply_walk_animation' "Player must implement walk bob/sway animation"
+Require-Text "scripts/game/player.gd" 'play_footstep' "Player must trigger footstep audio"
 Require-Text "scripts/game/guard.gd" 'func can_see_player' "Guard must implement player detection"
+Require-Text "scripts/game/guard.gd" 'enum GuardState' "Guard must define behavior states"
+Require-Text "scripts/game/guard.gd" 'func _update_suspicious' "Guard must implement suspicious behavior"
+Require-Text "scripts/game/guard.gd" 'func _update_chase' "Guard must implement chase behavior"
+Require-Text "scripts/game/guard.gd" 'func _update_search' "Guard must implement search behavior"
 Require-Text "scripts/game/security_camera.gd" 'func can_see_player' "SecurityCamera must implement player detection"
 Require-Text "scripts/game/level.gd" 'func restart_level' "Level must implement restart_level"
 Require-Text "scripts/game/level.gd" 'func get_wall_rects' "Level must read wall rectangles from level scenes"
+Require-Text "scripts/game/level.gd" 'func _set_alert_state' "Level must aggregate alert state"
 Require-Text "scripts/ui/hud.gd" 'func _on_alarm_changed' "HUD must react to alarm changes"
+Require-Text "scripts/ui/hud.gd" 'func set_alert_state' "HUD must display guard alert state"
 Require-Text "assets/kenney/ATTRIBUTION.md" 'Creative Commons Zero, CC0' "Attribution must record CC0 license"
+Require-Text "assets/kenney/ATTRIBUTION.md" 'RPG Audio' "Attribution must include Kenney RPG Audio source"
 
 if ($failures.Count -gt 0) {
     Write-Host "Project verification failed:" -ForegroundColor Red

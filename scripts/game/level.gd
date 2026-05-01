@@ -20,6 +20,8 @@ var _interactables: Array[Node] = []
 var _guards: Array[Node] = []
 var _cameras: Array[Node] = []
 var _runtime_floor_texture: Texture2D = null
+var _alert_state := "Hidden"
+var _alarm_pulse_timer := 0.0
 
 func _ready() -> void:
 	_runtime_floor_texture = floor_texture
@@ -37,6 +39,8 @@ func _ready() -> void:
 	result_overlay.retry_requested.connect(restart_level)
 	result_overlay.menu_requested.connect(_go_to_menu)
 	result_overlay.next_requested.connect(_go_to_level_select)
+	if hud.has_method("set_alert_state"):
+		hud.set_alert_state(_alert_state)
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -45,6 +49,7 @@ func _process(delta: float) -> void:
 		return
 	if not GameState.run_active:
 		return
+	_alarm_pulse_timer = maxf(_alarm_pulse_timer - delta, 0.0)
 	GameState.tick_timer(delta)
 	_update_interaction_prompt()
 	_update_detection(delta)
@@ -124,21 +129,59 @@ func _update_interaction_prompt() -> void:
 		hud.show_prompt("")
 
 func _update_detection(delta: float) -> void:
-	var seen := false
+	var alert_state := "Hidden"
 	for guard in _guards:
-		if is_instance_valid(guard) and guard.has_method("can_see_player") and guard.can_see_player(player.global_position):
-			seen = true
+		if not is_instance_valid(guard):
+			continue
+		if guard.has_method("get_alert_state"):
+			alert_state = _stronger_alert(alert_state, guard.get_alert_state())
+		elif guard.has_method("can_see_player") and guard.can_see_player(player.global_position):
+			alert_state = _stronger_alert(alert_state, "Chased")
+
+	for camera in _cameras:
+		if is_instance_valid(camera) and camera.has_method("can_see_player") and camera.can_see_player(player.global_position):
+			alert_state = _stronger_alert(alert_state, "Chased")
 			break
-	if not seen:
-		for camera in _cameras:
-			if is_instance_valid(camera) and camera.has_method("can_see_player") and camera.can_see_player(player.global_position):
-				seen = true
-				break
-	if seen:
-		GameState.add_alarm(alarm_rise_rate * delta)
-	else:
-		GameState.decay_alarm(alarm_decay_rate * delta)
-	hud.set_detected(seen)
+
+	match alert_state:
+		"Chased":
+			GameState.add_alarm(alarm_rise_rate * delta)
+			_play_alarm_pulse(0.48)
+		"Suspicious":
+			GameState.add_alarm(alarm_rise_rate * 0.45 * delta)
+			_play_alarm_pulse(0.78)
+		"Searching":
+			GameState.add_alarm(alarm_rise_rate * 0.16 * delta)
+			_play_alarm_pulse(1.05)
+		_:
+			GameState.decay_alarm(alarm_decay_rate * delta)
+	_set_alert_state(alert_state)
+
+func _set_alert_state(next_state: String) -> void:
+	_alert_state = next_state
+	if hud != null and hud.has_method("set_alert_state"):
+		hud.set_alert_state(_alert_state)
+
+func _stronger_alert(current: String, candidate: String) -> String:
+	if _alert_priority(candidate) > _alert_priority(current):
+		return candidate
+	return current
+
+func _alert_priority(state: String) -> int:
+	match state:
+		"Chased":
+			return 3
+		"Suspicious":
+			return 2
+		"Searching":
+			return 1
+	return 0
+
+func _play_alarm_pulse(cooldown: float) -> void:
+	if _alarm_pulse_timer > 0.0:
+		return
+	SoundManager.play_alarm_pulse()
+	_alarm_pulse_timer = cooldown
 
 func _on_result_changed(result: String) -> void:
 	if result == "win":
