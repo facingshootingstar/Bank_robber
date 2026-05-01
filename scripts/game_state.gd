@@ -55,6 +55,7 @@ var run_active: bool = false
 var result: String = ""
 var final_score: int = 0
 var final_rank: String = ""
+var final_badges := PackedStringArray()
 var best_scores: Dictionary = {}
 var best_ranks: Dictionary = {}
 
@@ -95,6 +96,7 @@ func start_level(level_number: int, required_loot: int = 0) -> void:
 	result = ""
 	final_score = 0
 	final_rank = ""
+	final_badges = PackedStringArray()
 	loot_changed.emit(loot_collected, loot_required)
 	alarm_changed.emit(alarm, alarm_max)
 	timer_changed.emit(run_timer)
@@ -164,6 +166,9 @@ func get_run_score() -> int:
 func get_run_rank() -> String:
 	return final_rank
 
+func get_run_badges_text() -> String:
+	return ", ".join(final_badges)
+
 func get_best_score(level_number: int) -> int:
 	return int(best_scores.get(level_number, 0))
 
@@ -180,6 +185,7 @@ func win_level() -> void:
 	if not run_active or result != "":
 		return
 	_calculate_final_score()
+	_calculate_final_badges()
 	result = "win"
 	run_active = false
 	unlocked_levels = mini(maxi(unlocked_levels, selected_level + 1), LEVELS.size())
@@ -205,6 +211,7 @@ func reset_run() -> void:
 	result = ""
 	final_score = 0
 	final_rank = ""
+	final_badges = PackedStringArray()
 	loot_changed.emit(loot_collected, loot_required)
 	alarm_changed.emit(alarm, alarm_max)
 	timer_changed.emit(run_timer)
@@ -239,6 +246,18 @@ func _rank_for_efficiency(efficiency: float) -> String:
 	if efficiency >= 0.5:
 		return "C"
 	return "D"
+
+func _calculate_final_badges() -> void:
+	final_badges = PackedStringArray()
+	if alarm <= 1.0:
+		final_badges.append("Ghost")
+	var par_time := float(PAR_TIMES.get(selected_level, 100.0))
+	if run_timer <= par_time:
+		final_badges.append("Fast")
+	if final_rank == "S":
+		final_badges.append("Mastermind")
+	if can_escape():
+		final_badges.append("Clean Haul")
 
 func _record_best_run() -> void:
 	var previous_score := get_best_score(selected_level)

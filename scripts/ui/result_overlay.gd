@@ -90,7 +90,7 @@ func show_result(won: bool) -> void:
 	visible = true
 	if won:
 		title_label.text = "HEIST COMPLETE"
-		detail_label.text = "Rank " + GameState.get_run_rank() + "  |  Score " + str(GameState.get_run_score()) + "\n" + _run_summary()
+		detail_label.text = "Rank " + GameState.get_run_rank() + "  |  Score " + str(GameState.get_run_score()) + "\n" + _run_summary() + "\nBadges: " + GameState.get_run_badges_text()
 		next_button.text = "Next Level" if GameState.has_next_level() else "Level Select"
 		next_button.disabled = false
 	else:

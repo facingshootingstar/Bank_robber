@@ -61,6 +61,10 @@ func _run() -> void:
 			_failures.append("GameState score was not calculated on win")
 		if not game_state.has_method("get_run_rank"):
 			_failures.append("GameState missing get_run_rank")
+		if not game_state.has_method("get_run_badges_text"):
+			_failures.append("GameState missing get_run_badges_text")
+		elif game_state.get_run_badges_text() == "":
+			_failures.append("GameState did not award completion badges")
 		if not game_state.has_method("get_best_score"):
 			_failures.append("GameState missing get_best_score")
 		elif game_state.get_best_score(1) <= 0:
