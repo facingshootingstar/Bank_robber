@@ -17,7 +17,7 @@ func _build_ui() -> void:
 	add_child(center)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(560, 470)
+	panel.custom_minimum_size = Vector2(590, 560)
 	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.024, 0.03, 0.04, 0.94), Color(0.45, 0.86, 0.68, 0.32), 8))
 	center.add_child(panel)
 
@@ -79,7 +79,10 @@ func _button_style(fill: Color, border: Color) -> StyleBoxFlat:
 func _slot_text(level_number: int) -> String:
 	var prefix := "Level " + str(level_number) + " - " + GameState.get_level_name(level_number)
 	if GameState.is_level_unlocked(level_number):
-		return prefix + "\n" + GameState.get_level_description(level_number)
+		var best := ""
+		if GameState.get_best_score(level_number) > 0:
+			best = " | Best " + GameState.get_best_rank(level_number) + " " + str(GameState.get_best_score(level_number))
+		return prefix + best + "\n" + GameState.get_level_description(level_number)
 	return prefix + " (Locked)"
 
 func _start_level(level_number: int) -> void:

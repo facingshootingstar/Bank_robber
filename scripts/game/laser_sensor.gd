@@ -24,6 +24,9 @@ func _physics_process(delta: float) -> void:
 		GameState.add_alarm(alarm_rate * delta)
 		if _sound_timer <= 0.0:
 			SoundManager.play_laser()
+			var level := get_parent()
+			if level != null and level.has_method("show_system_message"):
+				level.show_system_message("LASER TRIPPED", 0.65)
 			_sound_timer = 0.35
 	queue_redraw()
 

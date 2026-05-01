@@ -59,6 +59,12 @@ func _run() -> void:
 			_failures.append("GameState score was not calculated on win")
 		if not game_state.has_method("get_run_rank"):
 			_failures.append("GameState missing get_run_rank")
+		if not game_state.has_method("get_best_score"):
+			_failures.append("GameState missing get_best_score")
+		elif game_state.get_best_score(1) <= 0:
+			_failures.append("GameState best score was not recorded on win")
+		if not game_state.has_method("has_next_level"):
+			_failures.append("GameState missing has_next_level")
 
 	var sound_manager := root.get_node_or_null("SoundManager")
 	if sound_manager == null:

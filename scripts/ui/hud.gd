@@ -6,6 +6,8 @@ var objective_label: Label
 var timer_label: Label
 var prompt_label: Label
 var alert_label: Label
+var system_label: Label
+var _system_message_timer := 0.0
 
 func _ready() -> void:
 	_build_ui()
@@ -17,6 +19,14 @@ func _ready() -> void:
 	_on_alarm_changed(GameState.alarm, GameState.alarm_max)
 	_on_objective_changed("Find the vault cash.")
 	_on_timer_changed(0.0)
+
+func _process(delta: float) -> void:
+	if _system_message_timer <= 0.0:
+		return
+	_system_message_timer = maxf(_system_message_timer - delta, 0.0)
+	if _system_message_timer <= 0.0:
+		system_label.text = ""
+		system_label.visible = false
 
 func _build_ui() -> void:
 	var root := Control.new()
@@ -77,6 +87,20 @@ func _build_ui() -> void:
 	prompt_label.offset_bottom = 600
 	root.add_child(prompt_label)
 
+	system_label = Label.new()
+	system_label.visible = false
+	system_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	system_label.add_theme_font_size_override("font_size", 16)
+	system_label.add_theme_color_override("font_color", Color(0.58, 0.95, 1.0))
+	system_label.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.8))
+	system_label.add_theme_constant_override("shadow_offset_x", 2)
+	system_label.add_theme_constant_override("shadow_offset_y", 2)
+	system_label.offset_left = 500
+	system_label.offset_top = 82
+	system_label.offset_right = 940
+	system_label.offset_bottom = 116
+	root.add_child(system_label)
+
 func _on_loot_changed(current: int, required: int) -> void:
 	loot_label.text = "Loot $" + str(current) + " / $" + str(required)
 
@@ -93,6 +117,11 @@ func _on_timer_changed(seconds: float) -> void:
 
 func show_prompt(text: String) -> void:
 	prompt_label.text = text
+
+func show_system_message(text: String, seconds: float = 1.4) -> void:
+	system_label.text = text
+	system_label.visible = text != ""
+	_system_message_timer = maxf(seconds, 0.0)
 
 func set_alert_state(state: String) -> void:
 	match state:

@@ -53,6 +53,8 @@ var run_active: bool = false
 var result: String = ""
 var final_score: int = 0
 var final_rank: String = ""
+var best_scores: Dictionary = {}
+var best_ranks: Dictionary = {}
 
 func _ready() -> void:
 	_ensure_default_input_actions()
@@ -159,6 +161,18 @@ func get_run_score() -> int:
 func get_run_rank() -> String:
 	return final_rank
 
+func get_best_score(level_number: int) -> int:
+	return int(best_scores.get(level_number, 0))
+
+func get_best_rank(level_number: int) -> String:
+	return str(best_ranks.get(level_number, ""))
+
+func has_next_level() -> bool:
+	return selected_level < get_level_numbers().back()
+
+func get_next_level_number() -> int:
+	return mini(selected_level + 1, get_level_numbers().back())
+
 func win_level() -> void:
 	if not run_active or result != "":
 		return
@@ -166,6 +180,7 @@ func win_level() -> void:
 	result = "win"
 	run_active = false
 	unlocked_levels = mini(maxi(unlocked_levels, selected_level + 1), LEVELS.size())
+	_record_best_run()
 	objective_changed.emit("Escaped with the money.")
 	result_changed.emit(result)
 
@@ -220,3 +235,9 @@ func _rank_for_efficiency(efficiency: float) -> String:
 	if efficiency >= 0.5:
 		return "C"
 	return "D"
+
+func _record_best_run() -> void:
+	var previous_score := get_best_score(selected_level)
+	if final_score > previous_score:
+		best_scores[selected_level] = final_score
+		best_ranks[selected_level] = final_rank

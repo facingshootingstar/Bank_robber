@@ -43,7 +43,7 @@ func _ready() -> void:
 	pause_overlay.menu_requested.connect(_go_to_menu)
 	result_overlay.retry_requested.connect(restart_level)
 	result_overlay.menu_requested.connect(_go_to_menu)
-	result_overlay.next_requested.connect(_go_to_level_select)
+	result_overlay.next_requested.connect(_go_to_next_or_select)
 	if hud.has_method("set_alert_state"):
 		hud.set_alert_state(_alert_state)
 	_set_camera_loop_active(false)
@@ -95,6 +95,11 @@ func activate_camera_loop(duration: float) -> void:
 	_camera_loop_timer = maxf(_camera_loop_timer, duration)
 	_set_camera_loop_active(true)
 	GameState.objective_changed.emit("Cameras looped for " + str(int(ceil(_camera_loop_timer))) + " seconds.")
+	show_system_message("CAMERA LOOP " + str(int(ceil(_camera_loop_timer))) + "s", 1.6)
+
+func show_system_message(text: String, seconds: float = 1.4) -> void:
+	if hud != null and hud.has_method("show_system_message"):
+		hud.show_system_message(text, seconds)
 
 func _required_loot() -> int:
 	var total := 0
@@ -227,6 +232,14 @@ func _go_to_menu() -> void:
 func _go_to_level_select() -> void:
 	get_tree().paused = false
 	get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
+
+func _go_to_next_or_select() -> void:
+	get_tree().paused = false
+	if GameState.result == "win" and GameState.has_next_level():
+		var next_level := GameState.get_next_level_number()
+		get_tree().change_scene_to_file(GameState.get_level_path(next_level))
+	else:
+		get_tree().change_scene_to_file("res://scenes/ui/LevelSelect.tscn")
 
 func _draw() -> void:
 	draw_rect(Rect2(Vector2.ZERO, Vector2(960, 640)), Color(0.035, 0.04, 0.05))
