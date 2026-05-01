@@ -133,6 +133,7 @@ Require-Text "scripts/ui/hud.gd" 'func set_alert_state' "HUD must display guard 
 Require-Text "scripts/ui/hud.gd" 'func show_system_message' "HUD must display transient system feedback"
 Require-Text "scripts/ui/hud.gd" 'func _panel_style' "HUD must define a polished panel style"
 Require-Text "scripts/menu/main_menu.gd" 'func _panel_style' "Main menu must define a polished panel style"
+Require-Text "scripts/menu/main_menu.gd" 'func _on_continue_pressed' "Main menu must support continue flow"
 Require-Text "scripts/menu/level_select.gd" 'func _panel_style' "Level select must define a polished panel style"
 Require-Text "scripts/menu/level_select.gd" 'get_best_score' "Level select must display best score data"
 Require-Text "scenes/levels/Level2.tscn" 'VaultWestTop' "Level 2 vault west wall must be split for a doorway"

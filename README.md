@@ -27,6 +27,7 @@ Bank Robber is a small Godot 4 top-down stealth game. Sneak into the bank, avoid
 - In-session best score/rank display on level select
 - Persistent unlocks and best scores via Godot user save data
 - Direct next-level flow after successful escapes
+- Main menu Continue Heist button for the highest unlocked level
 - Alert HUD states, procedural footsteps, UI clicks, pickups, vault, and alarm pulses
 - Player movement bob/sway for a lighter sneaking feel
 - Framed floors, subtle security light bands, prop shadows, and polished HUD/menu panels

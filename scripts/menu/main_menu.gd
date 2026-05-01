@@ -17,7 +17,7 @@ func _build_ui() -> void:
 	add_child(center)
 
 	var panel := PanelContainer.new()
-	panel.custom_minimum_size = Vector2(420, 360)
+	panel.custom_minimum_size = Vector2(420, 410)
 	panel.add_theme_stylebox_override("panel", _panel_style(Color(0.025, 0.032, 0.045, 0.94), Color(0.95, 0.65, 0.28, 0.38), 8))
 	center.add_child(panel)
 
@@ -39,6 +39,10 @@ func _build_ui() -> void:
 	box.add_child(subtitle)
 
 	box.add_child(_spacer(18))
+
+	var continue_button := _button("Continue Heist - Level " + str(GameState.unlocked_levels))
+	continue_button.pressed.connect(_on_continue_pressed)
+	box.add_child(continue_button)
 
 	var play_button := _button("Play Level 1")
 	play_button.pressed.connect(_on_play_pressed)
@@ -84,6 +88,12 @@ func _on_play_pressed() -> void:
 	SoundManager.play_ui_click()
 	GameState.start_level(1)
 	get_tree().change_scene_to_file(GameState.get_level_path(1))
+
+func _on_continue_pressed() -> void:
+	SoundManager.play_ui_click()
+	var level_number := mini(maxi(GameState.unlocked_levels, 1), GameState.get_level_numbers().back())
+	GameState.start_level(level_number)
+	get_tree().change_scene_to_file(GameState.get_level_path(level_number))
 
 func _on_level_select_pressed() -> void:
 	SoundManager.play_ui_click()
