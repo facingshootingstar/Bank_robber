@@ -11,6 +11,7 @@ const SCENES := [
 	"res://scenes/game/SecurityCamera.tscn",
 	"res://scenes/game/HackTerminal.tscn",
 	"res://scenes/game/LaserSensor.tscn",
+	"res://scenes/game/PowerSwitch.tscn",
 	"res://scenes/game/Loot.tscn",
 	"res://scenes/game/Vault.tscn",
 	"res://scenes/game/ExitZone.tscn",
@@ -79,6 +80,7 @@ func _run() -> void:
 		sound_manager.play_ui_click()
 		sound_manager.play_hack()
 		sound_manager.play_laser()
+		sound_manager.play_power_down()
 		await process_frame
 		await create_timer(0.35).timeout
 		if sound_manager.has_method("stop_all"):

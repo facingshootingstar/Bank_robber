@@ -8,6 +8,7 @@ extends Node2D
 var _player: Node2D = null
 var _sound_timer := 0.0
 var _time := 0.0
+var _disabled := false
 
 func _ready() -> void:
 	add_to_group("sensors")
@@ -15,10 +16,17 @@ func _ready() -> void:
 	_player = get_parent().get_node_or_null("Player") as Node2D
 	queue_redraw()
 
+func set_disabled(disabled: bool) -> void:
+	_disabled = disabled
+	queue_redraw()
+
 func _physics_process(delta: float) -> void:
 	if not GameState.run_active:
 		return
 	_time += delta
+	if _disabled:
+		queue_redraw()
+		return
 	_sound_timer = maxf(_sound_timer - delta, 0.0)
 	if _player != null and _player_crosses_beam(_player.global_position):
 		GameState.add_alarm(alarm_rate * delta)
@@ -49,9 +57,13 @@ func _draw() -> void:
 	var pulse := 0.55 + 0.35 * sin(_time * pulse_speed)
 	var beam_color := Color(1.0, 0.05, 0.08, 0.32 + pulse * 0.2)
 	var core_color := Color(1.0, 0.65, 0.55, 0.76)
+	if _disabled:
+		beam_color = Color(0.28, 0.82, 1.0, 0.13)
+		core_color = Color(0.58, 0.95, 1.0, 0.42)
 	draw_line(Vector2.ZERO, Vector2.RIGHT * beam_length, beam_color, beam_width)
 	draw_line(Vector2.ZERO, Vector2.RIGHT * beam_length, core_color, 2.0)
 	draw_circle(Vector2.ZERO, 9.0, Color(0.16, 0.02, 0.03))
 	draw_circle(Vector2.RIGHT * beam_length, 9.0, Color(0.16, 0.02, 0.03))
-	draw_circle(Vector2.ZERO, 4.0, Color(1.0, 0.2, 0.16))
-	draw_circle(Vector2.RIGHT * beam_length, 4.0, Color(1.0, 0.2, 0.16))
+	var node_color := Color(0.35, 0.9, 1.0) if _disabled else Color(1.0, 0.2, 0.16)
+	draw_circle(Vector2.ZERO, 4.0, node_color)
+	draw_circle(Vector2.RIGHT * beam_length, 4.0, node_color)

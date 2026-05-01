@@ -22,11 +22,14 @@ var walls: Array[Rect2] = []
 var _interactables: Array[Node] = []
 var _guards: Array[Node] = []
 var _cameras: Array[Node] = []
+var _sensors: Array[Node] = []
 var _runtime_floor_texture: Texture2D = null
 var _alert_state := "Hidden"
 var _alarm_pulse_timer := 0.0
 var _camera_loop_timer := 0.0
 var _camera_loop_active := false
+var _laser_shutdown_timer := 0.0
+var _laser_shutdown_active := false
 
 func _ready() -> void:
 	_runtime_floor_texture = floor_texture
@@ -36,6 +39,7 @@ func _ready() -> void:
 	_interactables = get_tree().get_nodes_in_group("interactables")
 	_guards = get_tree().get_nodes_in_group("guards")
 	_cameras = get_tree().get_nodes_in_group("cameras")
+	_sensors = get_tree().get_nodes_in_group("sensors")
 	GameState.start_level(level_number, _required_loot())
 	GameState.result_changed.connect(_on_result_changed)
 	pause_overlay.resume_requested.connect(_on_resume_requested)
@@ -47,6 +51,7 @@ func _ready() -> void:
 	if hud.has_method("set_alert_state"):
 		hud.set_alert_state(_alert_state)
 	_set_camera_loop_active(false)
+	_set_laser_shutdown_active(false)
 	queue_redraw()
 
 func _process(delta: float) -> void:
@@ -57,6 +62,7 @@ func _process(delta: float) -> void:
 		return
 	_alarm_pulse_timer = maxf(_alarm_pulse_timer - delta, 0.0)
 	_update_camera_loop(delta)
+	_update_laser_shutdown(delta)
 	GameState.tick_timer(delta)
 	_update_interaction_prompt()
 	_update_detection(delta)
@@ -100,6 +106,11 @@ func activate_camera_loop(duration: float) -> void:
 func show_system_message(text: String, seconds: float = 1.4) -> void:
 	if hud != null and hud.has_method("show_system_message"):
 		hud.show_system_message(text, seconds)
+
+func activate_laser_shutdown(duration: float) -> void:
+	_laser_shutdown_timer = maxf(_laser_shutdown_timer, duration)
+	_set_laser_shutdown_active(true)
+	show_system_message("LASERS OFFLINE " + str(int(ceil(_laser_shutdown_timer))) + "s", 1.6)
 
 func _required_loot() -> int:
 	var total := 0
@@ -214,6 +225,21 @@ func _set_camera_loop_active(active: bool) -> void:
 	for camera in _cameras:
 		if is_instance_valid(camera) and camera.has_method("set_looped"):
 			camera.set_looped(active)
+
+func _update_laser_shutdown(delta: float) -> void:
+	if _laser_shutdown_timer <= 0.0:
+		if _laser_shutdown_active:
+			_set_laser_shutdown_active(false)
+		return
+	_laser_shutdown_timer = maxf(_laser_shutdown_timer - delta, 0.0)
+	if _laser_shutdown_timer <= 0.0:
+		_set_laser_shutdown_active(false)
+
+func _set_laser_shutdown_active(active: bool) -> void:
+	_laser_shutdown_active = active
+	for sensor in _sensors:
+		if is_instance_valid(sensor) and sensor.has_method("set_disabled"):
+			sensor.set_disabled(active)
 
 func _on_result_changed(result: String) -> void:
 	if result == "win":

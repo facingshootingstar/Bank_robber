@@ -34,6 +34,7 @@ $requiredFiles = @(
     "scripts/game/security_camera.gd",
     "scripts/game/hack_terminal.gd",
     "scripts/game/laser_sensor.gd",
+    "scripts/game/power_switch.gd",
     "scripts/game/loot.gd",
     "scripts/game/vault.gd",
     "scripts/game/exit_zone.gd",
@@ -52,6 +53,7 @@ $requiredFiles = @(
     "scenes/game/SecurityCamera.tscn",
     "scenes/game/HackTerminal.tscn",
     "scenes/game/LaserSensor.tscn",
+    "scenes/game/PowerSwitch.tscn",
     "scenes/game/Loot.tscn",
     "scenes/game/Vault.tscn",
     "scenes/game/ExitZone.tscn",
@@ -93,6 +95,7 @@ Require-Text "scripts/audio/sound_manager.gd" 'func play_footstep' "SoundManager
 Require-Text "scripts/audio/sound_manager.gd" 'func play_alarm_pulse' "SoundManager must implement alarm pulse audio"
 Require-Text "scripts/audio/sound_manager.gd" 'func play_hack' "SoundManager must implement hack audio"
 Require-Text "scripts/audio/sound_manager.gd" 'func play_laser' "SoundManager must implement laser audio"
+Require-Text "scripts/audio/sound_manager.gd" 'func play_power_down' "SoundManager must implement power switch audio"
 Require-Text "scripts/game/player.gd" 'func _physics_process' "Player must implement physics movement"
 Require-Text "scripts/game/player.gd" 'func _apply_walk_animation' "Player must implement walk bob/sway animation"
 Require-Text "scripts/game/player.gd" 'play_footstep' "Player must trigger footstep audio"
@@ -108,9 +111,12 @@ Require-Text "scripts/game/security_camera.gd" 'func can_see_player' "SecurityCa
 Require-Text "scripts/game/security_camera.gd" 'func set_looped' "SecurityCamera must support camera loop hacking"
 Require-Text "scripts/game/hack_terminal.gd" 'func interact' "HackTerminal must be interactable"
 Require-Text "scripts/game/laser_sensor.gd" 'func _player_crosses_beam' "LaserSensor must detect beam crossing"
+Require-Text "scripts/game/laser_sensor.gd" 'func set_disabled' "LaserSensor must support temporary shutdown"
+Require-Text "scripts/game/power_switch.gd" 'func interact' "PowerSwitch must be interactable"
 Require-Text "scripts/game/level.gd" 'func restart_level' "Level must implement restart_level"
 Require-Text "scripts/game/level.gd" 'func get_wall_rects' "Level must read wall rectangles from level scenes"
 Require-Text "scripts/game/level.gd" 'func activate_camera_loop' "Level must activate camera loop hacks"
+Require-Text "scripts/game/level.gd" 'func activate_laser_shutdown' "Level must activate laser shutdowns"
 Require-Text "scripts/game/level.gd" 'func show_system_message' "Level must relay system messages to HUD"
 Require-Text "scripts/game/level.gd" 'func _go_to_next_or_select' "Level must route result overlay to the next level"
 Require-Text "scripts/game/level.gd" 'func _set_alert_state' "Level must aggregate alert state"

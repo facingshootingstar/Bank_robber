@@ -36,6 +36,9 @@ func play_hack() -> void:
 func play_laser() -> void:
 	_play("laser", -18.0, randf_range(0.96, 1.04))
 
+func play_power_down() -> void:
+	_play("power_down", -13.0, 1.0)
+
 func stop_all() -> void:
 	for player in _players:
 		player.stop()
@@ -49,6 +52,7 @@ func _build_streams() -> void:
 	_streams["ui_click"] = _make_tone(420.0, 0.04, 0.18, 0.0)
 	_streams["hack"] = _make_tone(1040.0, 0.16, 0.22, -0.08)
 	_streams["laser"] = _make_tone(760.0, 0.05, 0.16, 0.0)
+	_streams["power_down"] = _make_tone(260.0, 0.2, 0.24, -0.22)
 
 func _play(name: String, volume_db: float, pitch_scale: float) -> void:
 	if not _streams.has(name):

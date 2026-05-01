@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="Script" path="res://scripts/game/level.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://scenes/game/Prop.tscn" id="11"]
 [ext_resource type="PackedScene" path="res://scenes/game/HackTerminal.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/game/LaserSensor.tscn" id="13"]
+[ext_resource type="PackedScene" path="res://scenes/game/PowerSwitch.tscn" id="14"]
 
 [node name="Level5" type="Node2D"]
 script = ExtResource("1")
@@ -138,6 +139,10 @@ loop_duration = 8.0
 [node name="HackTerminalB" parent="." instance=ExtResource("12")]
 position = Vector2(724, 508)
 loop_duration = 6.0
+
+[node name="LaserPowerSwitch" parent="." instance=ExtResource("14")]
+position = Vector2(326, 522)
+shutdown_duration = 8.0
 
 [node name="LaserGalleryA" parent="." instance=ExtResource("13")]
 position = Vector2(252, 304)
