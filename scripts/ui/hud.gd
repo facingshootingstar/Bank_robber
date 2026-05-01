@@ -107,6 +107,10 @@ func _on_loot_changed(current: int, required: int) -> void:
 func _on_alarm_changed(current: float, maximum: float) -> void:
 	alarm_bar.max_value = maximum
 	alarm_bar.value = current
+	var ratio := 0.0
+	if maximum > 0.0:
+		ratio = clampf(current / maximum, 0.0, 1.0)
+	alarm_bar.add_theme_stylebox_override("fill", _panel_style(_alarm_color(ratio), Color(1.0, 0.66, 0.35, 0.18), 4))
 
 func _on_objective_changed(text: String) -> void:
 	objective_label.text = text
@@ -148,3 +152,10 @@ func _panel_style(fill: Color, border: Color, radius: int) -> StyleBoxFlat:
 	style.set_border_width_all(1)
 	style.set_corner_radius_all(radius)
 	return style
+
+func _alarm_color(ratio: float) -> Color:
+	if ratio >= 0.72:
+		return Color(0.95, 0.12, 0.09, 0.96)
+	if ratio >= 0.38:
+		return Color(1.0, 0.68, 0.18, 0.96)
+	return Color(0.24, 0.86, 0.54, 0.94)

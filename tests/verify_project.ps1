@@ -131,6 +131,7 @@ Require-Text "scripts/game/prop.gd" 'func _draw_highlight' "Props and walls must
 Require-Text "scripts/ui/hud.gd" 'func _on_alarm_changed' "HUD must react to alarm changes"
 Require-Text "scripts/ui/hud.gd" 'func set_alert_state' "HUD must display guard alert state"
 Require-Text "scripts/ui/hud.gd" 'func show_system_message' "HUD must display transient system feedback"
+Require-Text "scripts/ui/hud.gd" 'func _alarm_color' "HUD must color alarm pressure dynamically"
 Require-Text "scripts/ui/hud.gd" 'func _panel_style' "HUD must define a polished panel style"
 Require-Text "scripts/menu/main_menu.gd" 'func _panel_style' "Main menu must define a polished panel style"
 Require-Text "scripts/menu/main_menu.gd" 'func _on_continue_pressed' "Main menu must support continue flow"
