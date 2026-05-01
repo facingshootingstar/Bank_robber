@@ -35,6 +35,7 @@ $requiredFiles = @(
     "scripts/game/hack_terminal.gd",
     "scripts/game/laser_sensor.gd",
     "scripts/game/power_switch.gd",
+    "scripts/game/thermal_vent.gd",
     "scripts/game/loot.gd",
     "scripts/game/vault.gd",
     "scripts/game/exit_zone.gd",
@@ -54,6 +55,7 @@ $requiredFiles = @(
     "scenes/game/HackTerminal.tscn",
     "scenes/game/LaserSensor.tscn",
     "scenes/game/PowerSwitch.tscn",
+    "scenes/game/ThermalVent.tscn",
     "scenes/game/Loot.tscn",
     "scenes/game/Vault.tscn",
     "scenes/game/ExitZone.tscn",
@@ -100,6 +102,7 @@ Require-Text "scripts/audio/sound_manager.gd" 'func play_alarm_pulse' "SoundMana
 Require-Text "scripts/audio/sound_manager.gd" 'func play_hack' "SoundManager must implement hack audio"
 Require-Text "scripts/audio/sound_manager.gd" 'func play_laser' "SoundManager must implement laser audio"
 Require-Text "scripts/audio/sound_manager.gd" 'func play_power_down' "SoundManager must implement power switch audio"
+Require-Text "scripts/audio/sound_manager.gd" 'func play_vent' "SoundManager must implement thermal vent audio"
 Require-Text "scripts/game/player.gd" 'func _physics_process' "Player must implement physics movement"
 Require-Text "scripts/game/player.gd" 'func _apply_walk_animation' "Player must implement walk bob/sway animation"
 Require-Text "scripts/game/player.gd" 'play_footstep' "Player must trigger footstep audio"
@@ -117,6 +120,7 @@ Require-Text "scripts/game/hack_terminal.gd" 'func interact' "HackTerminal must 
 Require-Text "scripts/game/laser_sensor.gd" 'func _player_crosses_beam' "LaserSensor must detect beam crossing"
 Require-Text "scripts/game/laser_sensor.gd" 'func set_disabled' "LaserSensor must support temporary shutdown"
 Require-Text "scripts/game/power_switch.gd" 'func interact' "PowerSwitch must be interactable"
+Require-Text "scripts/game/thermal_vent.gd" 'func _player_in_heat' "ThermalVent must detect heat overlap"
 Require-Text "scripts/game/level.gd" 'func restart_level' "Level must implement restart_level"
 Require-Text "scripts/game/level.gd" 'func get_wall_rects' "Level must read wall rectangles from level scenes"
 Require-Text "scripts/game/level.gd" 'func activate_camera_loop' "Level must activate camera loop hacks"
@@ -142,6 +146,8 @@ Require-Text "scripts/menu/level_select.gd" 'get_best_score' "Level select must 
 Require-Text "scenes/levels/Level2.tscn" 'VaultWestTop' "Level 2 vault west wall must be split for a doorway"
 Require-Text "scenes/levels/Level2.tscn" 'VaultWestBottom' "Level 2 vault west wall must have a lower split segment"
 Require-Text "scenes/levels/Level2.tscn" 'name="DoorHint"[\s\S]*?position = Vector2\(592, 332\)' "Level 2 door hint must be centered on the fixed vault doorway"
+Require-Text "scenes/levels/Level3.tscn" 'ThermalVent' "Level 3 must include a thermal vent"
+Require-Text "scenes/levels/Level5.tscn" 'ThermalVent' "Level 5 must include a thermal vent"
 Require-Text "assets/kenney/ATTRIBUTION.md" 'Creative Commons Zero, CC0' "Attribution must record CC0 license"
 Require-Text "assets/kenney/ATTRIBUTION.md" 'RPG Audio' "Attribution must include Kenney RPG Audio source"
 

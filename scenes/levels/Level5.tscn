@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3]
+[gd_scene load_steps=16 format=3]
 
 [ext_resource type="Script" path="res://scripts/game/level.gd" id="1"]
 [ext_resource type="PackedScene" path="res://scenes/game/Player.tscn" id="2"]
@@ -14,6 +14,7 @@
 [ext_resource type="PackedScene" path="res://scenes/game/HackTerminal.tscn" id="12"]
 [ext_resource type="PackedScene" path="res://scenes/game/LaserSensor.tscn" id="13"]
 [ext_resource type="PackedScene" path="res://scenes/game/PowerSwitch.tscn" id="14"]
+[ext_resource type="PackedScene" path="res://scenes/game/ThermalVent.tscn" id="15"]
 
 [node name="Level5" type="Node2D"]
 script = ExtResource("1")
@@ -125,6 +126,12 @@ size = Vector2(44, 44)
 texture_path = "res://assets/kenney/roguelike-indoors/tiles/crate.png"
 tiled = false
 z_layer = 3
+
+[node name="ThermalVentGallery" parent="." instance=ExtResource("15")]
+position = Vector2(522, 340)
+heat_radius = 44.0
+active_duration = 1.15
+idle_duration = 1.85
 
 [node name="ExitZone" parent="." instance=ExtResource("7")]
 position = Vector2(830, 118)

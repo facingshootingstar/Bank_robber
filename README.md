@@ -22,6 +22,7 @@ Bank Robber is a small Godot 4 top-down stealth game. Sneak into the bank, avoid
 - Hack terminals that temporarily loop cameras
 - Laser sensor beams that pressure the alarm meter
 - Power switches that temporarily shut down laser grids
+- Cycling thermal vents that punish bad timing
 - Loot, vault, exit, alarm, timer, HUD
 - Completion score and rank based on loot, speed, and alarm control
 - In-session best score/rank display on level select
